@@ -17,7 +17,9 @@ public class WorldGenerator : MonoBehaviour {
         workingMap = new float[mapInfo.width, mapInfo.height];
         setMap = new int[mapInfo.width, mapInfo.height];
         firstPass();
-        secondPass();
+        //secondPass();
+        //seed += seed;
+        //secondPass();
         commit();
 
 	}
@@ -57,8 +59,8 @@ public class WorldGenerator : MonoBehaviour {
     private void firstPass() {
         for (int x = 0; x < mapInfo.width; x++) {
             for (int y = 0; y < mapInfo.height; y++) {
-                float xCoord = (seed + (float)x / (float)mapInfo.width);
-                float yCoord = (seed + (float)y / (float)mapInfo.height);
+                float xCoord = (seed + (float)x / 8f);
+                float yCoord = (seed + (float)y / 8f);
                 workingMap[x,y] = Mathf.PerlinNoise(xCoord, yCoord);
             }
         }
