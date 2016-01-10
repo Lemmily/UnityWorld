@@ -8,7 +8,7 @@ public class Resource {
     //public List<Need> needs;
     public Dictionary<string, int> needs;
     
-    public Resource(string name,float output,float time, Dictionary<string, int> needs=null) {
+    public Resource(string name, float output,float time, Dictionary<string, int> needs=null) {
         this.name = name;
         this.output = output;
         this.time = time;

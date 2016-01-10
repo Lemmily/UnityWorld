@@ -3,12 +3,12 @@ using System.Collections.Generic;
 
 public class Business{
     private string businessName = "";
-    private Economy.Resource productionResource;
+    private Resource productionResource;
     private int points;
     private int updateSpeed = 5;
-    private Dictionary<Economy.Resource,double> resources = null;   //Dictionary of Resources held by business, <name,quantity>
+    private Dictionary<Resource,double> resources = null;   //Dictionary of Resources held by business, <name,quantity>
 
-    public Business(string name, Economy.Resource res)
+    public Business(string name, Resource res)
     {
         create(name, res);
     }
@@ -21,9 +21,9 @@ public class Business{
     //}
 
     // Creation of a Business entity - default params
-    void create(string name, Economy.Resource res)
+    void create(string name, Resource res)
     {
-        resources = new Dictionary<Economy.Resource, double>();
+        resources = new Dictionary<Resource, double>();
         businessName = name;
         productionResource = res;
         resources.Add(res,0.0);
