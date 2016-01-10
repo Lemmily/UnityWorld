@@ -1,0 +1,90 @@
+<?xml version="1.0"?>
+<data>
+  <raw keyName="raw" name="raw">
+    <location>land</location>
+    <output>1.0</output>
+    <time>2.5</time>
+  </raw>
+  <processed keyName="processed" name="processed">
+    <location>furnace</location>
+    <need type="raw" amount="6"/>
+    <output>1.0</output>
+    <time>1.0</time>
+  </processed>
+  <manufactured keyName="manufactured" name="manufactured">
+    <location>factory</location>
+    <need type="processed" amount="4"/>
+    <output>1.0</output>
+    <time>0.5</time>
+  </manufactured>
+  <luxury keyName="luxury" name="luxury">
+    <location>factory</location>
+    <need type="manufactured" amount="2"/>
+    <output>1.0</output>
+    <time>5</time>
+  </luxury>
+  <!--<raw keyName="ironore" name="iron ore">
+        <location>mine</location>
+        <output>1.0</output>
+        <time>3.0</time>
+    </raw>
+    <raw keyName="copperore" name="copper ore">
+        <location>mine</location>
+        <output>1.0</output>
+        <time>3.0</time>
+    </raw>
+    <raw keyName="fuel" name="fuel">
+        <location>mine</location>
+        <output>1.0</output>
+        <time>3.0</time>
+    </raw>
+  <raw keyName="stone" name="stone">
+    <location name="quarry">mine</location>
+    <output>1.0</output>
+    <time>2.5</time>
+  </raw>
+  <raw keyName="wood" name="wood">
+    <location name="forest">land</location>
+    <output>1.0</output>
+    <time>2.5</time>
+  </raw>
+  <raw keyName="food" name="food">
+    <location name="field">land</location>
+    <output>1.0</output>
+    <time>2.5</time>
+  </raw>
+    <raw keyName="slag" name="slag">
+        <location>furnace</location>
+        <output>1.0</output>
+        <time>1.0</time>
+    </raw>
+
+    <processed keyName="ironbar" name="iron bar">
+        <location>furnace</location>
+        <need type="iron ore" amount="1"/>
+        <need type="fuel" amount="1"/>
+        <output>1.0</output>
+        <time>1.0</time>
+        <byproduct type="slag" amount="0.1" chance="0.1"/>
+    </processed>
+    <processed keyName="copperplate" name="copper plate">
+        <location>furnace</location>
+        <need type="copper ore" amount="1"/>
+        <need type="fuel" amount="1"/>
+        <output>1.0</output>
+        <time>1.0</time>
+        <byproduct type="slag" amount="0.1" chance="0.1"/>
+    </processed>
+    <processed keyName="stonebrick" name="stone brick">
+        <location name="kiln">furnace</location>
+        <need type="stone" amount="2.0"/>
+        <output>1.0</output>
+        <time>3.5</time>
+    </processed>
+    <manufactured keyName="wall" name="wall">
+        <location>factory</location>
+        <need type="stone brick" amount="5"/>
+        <output>1.0</output>
+        <time>0.5</time>
+    </manufactured>-->
+</data>
