@@ -30,32 +30,10 @@ public class VisualTiles : MonoBehaviour {
             UpdateMesh();
             mapInfo.updating = false;
         }
-        if (Input.GetMouseButtonDown(1) || Input.GetMouseButtonDown(0)) {
-            RaycastHit hit;
-            if (!Physics.Raycast(FindObjectOfType<Camera>().ScreenPointToRay(Input.mousePosition), out hit)) 
-                return;
-            
-            Renderer renderer = hit.collider.GetComponent<Renderer>();
-            MeshCollider meshCollider = hit.collider as MeshCollider;
-            if (renderer == null || renderer.sharedMaterial == null || renderer.sharedMaterial.mainTexture == null || meshCollider == null)
-                return;
-
-            Texture tex = renderer.material.mainTexture;
-            Vector2 point = findCoord(transform.InverseTransformPoint(hit.point));
-            print(hit.textureCoord + " is - " + point);
-            if (Input.GetMouseButtonDown(1)) {
-                //mapInfo.SetTile(point, 1);
-                //mapInfo.ChangeTileBy(point, 1);
-                UpdateMesh();
-            }
-        } else if (Input.GetMouseButtonDown(2)) {
-            //mapInfo.GenerateMap();
-            UpdateMesh();
-        }
     }
 
 
-    private Vector2 findCoord(Vector3 point) {
+    public Vector2 findCoord(Vector3 point) {
         return new Vector2((int)(point.x / tileSizeX), (int)(point.y / tileSizeY));
     }
 

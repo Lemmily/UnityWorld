@@ -1,6 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
 using System.Collections;
-using System;
+using UnityEngine;
 
 public class WorldGenerator : MonoBehaviour {
 
@@ -11,27 +11,45 @@ public class WorldGenerator : MonoBehaviour {
 
     public float[,] workingMap;
     public int[,] setMap;
+
+    public float[,] maskMap;
     // Use this for initialization
     void Start () {
         mapInfo = gameObject.GetComponent<MapInfo>();
         workingMap = new float[mapInfo.width, mapInfo.height];
+        maskMap = new float[mapInfo.width, mapInfo.height];
         setMap = new int[mapInfo.width, mapInfo.height];
         firstPass();
-        //secondPass();
-        //seed += seed;
-        //secondPass();
+        generateMapMask();
+        normalise(maskMap);
+        applyMask();
+        normalise(workingMap);
         commit();
 
-	}
+    }
 
-    private void commit() {
-        normalise(workingMap);
+    public void applyMask() {
+        for (int x = 0; x < mapInfo.width; x++) {
+            for (int y = 0; y < mapInfo.height; y++) {
+                workingMap[x, y] *= maskMap[x, y];
+            }
+        }
+        //clean mask now.
+        maskMap = new float[mapInfo.width, mapInfo.height];
+    }
+
+    public void commit() {
+        commit("terrain");
+        mapInfo.setMap(setMap);
+    }
+
+    public void commit(string layer) {
         for (int x = 0; x < mapInfo.width; x++) {
             for (int y = 0; y < mapInfo.height; y++) {
                 setMap[x, y] = (int)workingMap[x, y];
             }
         }
-        mapInfo.SetMap(setMap);
+        mapInfo.setLayer(layer, setMap);
     }
 
     private float[,] normalise(float[,] map) {
@@ -49,7 +67,7 @@ public class WorldGenerator : MonoBehaviour {
 
         for (int x = 0; x < mapInfo.width; x++) {
             for (int y = 0; y < mapInfo.height; y++) {
-                map[x, y] = ((map[x, y] - lowest) / (highest - lowest)) * 2;
+                map[x, y] = ((map[x, y] - lowest) / (highest - lowest)) * 4;
             }
         }
 
@@ -61,7 +79,16 @@ public class WorldGenerator : MonoBehaviour {
             for (int y = 0; y < mapInfo.height; y++) {
                 float xCoord = (seed + (float)x / 8f);
                 float yCoord = (seed + (float)y / 8f);
-                workingMap[x,y] = Mathf.PerlinNoise(xCoord, yCoord);
+                workingMap[x,y] += Mathf.PerlinNoise(xCoord, yCoord);
+            }
+        }
+    }
+    private void solidColour() {
+        for (int x = 0; x < mapInfo.width; x++) {
+            for (int y = 0; y < mapInfo.height; y++) {
+                float xCoord = (seed + (float)x / 8f);
+                float yCoord = (seed + (float)y / 8f);
+                workingMap[x, y] += 2;
             }
         }
     }
@@ -85,40 +112,65 @@ public class WorldGenerator : MonoBehaviour {
 
     public void thing() {
 
-        //NoiseMethod method = Noise.methods[(int)type][dimensions - 1];
-        //float stepSize = 1f / resolution;
+        float w, h;
+        w = mapInfo.width;
+        h = mapInfo.height;
 
-        //float w, h = resolution;
-        //w = resolution;
+        float stepSizeW = 1f / w;
+        float stepSizeH = 1f / h;
+        float ellipseW = w;
+        float ellipseH = h - 10;
 
-        //float ellipseW = w;
-        //float ellipseH = h - 10;
+        float ellipseX = w * 0.5f;
+        float ellipseY = h * 0.5f;
 
-        //float ellipseX = w * 0.5f;
-        //float ellipseY = h * 0.5f;
+        for (int y = 0; y < h; y++) {
+            for (int x = 0; x < w; x++) {
+                //Vector3 point = Vector3.Lerp(point0, point1, (x + 0.5f) * stepSize);
+                // sample = Mathf.PerlinNoise((x * 2.5f) + seed, (y * 2.5f) + seed);
+                //sample = sample * 0.5f + 0.5f;
+                float sample = 1f;
+                float distance_x = Mathf.Abs(x - ellipseX);
+                float distance_y = Mathf.Abs(y - ellipseY);
+                float distance = Mathf.Sqrt((distance_x * distance_x) / (ellipseW / 2 * ellipseW / 2) +
+                    (distance_y * distance_y) / (ellipseH / 2 * ellipseH / 2)); // out of 1
 
-        //for (int y = 0; y < resolution; y++) {
-        //    Vector3 point0 = Vector3.Lerp(point00, point01, (y + 0.5f) * stepSize);
-        //    Vector3 point1 = Vector3.Lerp(point10, point11, (y + 0.5f) * stepSize);
-        //    for (int x = 0; x < resolution; x++) {
-        //        Vector3 point = Vector3.Lerp(point0, point1, (x + 0.5f) * stepSize);
-        //        float sample = Noise.Sum(method, point, frequency, octaves, lacunarity, persistence).value;
-        //        sample = sample * 0.5f + 0.5f;
+                float max_width = Mathf.Sqrt((x - ellipseX) * (x - ellipseX) + (y - ellipseY) * (y - ellipseY));
+                distance = max_width * distance; //gets the actual distance. 
+                float delta = distance / max_width;
+                float gradient = delta * delta;
 
-        //        float distance_x = Mathf.Abs(x - ellipseX);
-        //        float distance_y = Mathf.Abs(y - ellipseY);
-        //        float distance = Mathf.Sqrt((distance_x * distance_x) / (ellipseW / 2 * ellipseW / 2) +
-        //            (distance_y * distance_y) / (ellipseH / 2 * ellipseH / 2)); // out of 1
+                sample *= Mathf.Max(0.0f, 1f - gradient);
+                maskMap[x,y] += sample;
+            }
+        }
+    }
 
-        //        float max_width = Mathf.Sqrt((x - ellipseX) * (x - ellipseX) +
-        //            (y - ellipseY) * (y - ellipseY));
-        //        distance = max_width * distance; //gets the actual distance. 
-        //        float delta = distance / max_width;
-        //        float gradient = delta * delta;
 
-        //        sample *= Mathf.Max(0.0f, 1f - gradient);
-        //        texture.SetPixel(x, y, coloring.Evaluate(sample));
-        //    }
-        //}
+    public void generateMapMask() {
+        UnityEngine.Random.seed = (int)seed;
+        for (int i = 0; i < 100; i++) {
+            int x = (int) (Mathf.PerlinNoise(seed + UnityEngine.Random.value, seed + UnityEngine.Random.value) * mapInfo.width);
+            int y = (int) (Mathf.PerlinNoise(seed + UnityEngine.Random.value, seed + UnityEngine.Random.value) * mapInfo.height);
+
+            int w = (int)(UnityEngine.Random.value * 40f);
+            int h = (int)(UnityEngine.Random.value * 40f);
+
+            addHill(w, h, x, y);
+        }
+    }
+
+    public void addHill(float wC, float hC, int cenX, int cenY) {
+        int minX = (int)(cenX - (wC / 2));
+        int minY = (int)(cenY - (hC / 2));
+        for (int y = 0; y < hC; y++) {
+            for (int x = 0; x < wC; x++) {
+                float value = ((float)Mathf.Sin(((float)x / (float)wC) * Mathf.PI)) * ((float)Mathf.Sin(((float)y / (float)hC) * Mathf.PI));
+                if (0 > (minX + x) || (minX + x) >= mapInfo.width || 0 > (minY + y) || (minY + y) >= mapInfo.height) {
+                    continue;
+                }
+                maskMap[minX + x, minY + y] += value;
+            }
+        }
     }
 }
