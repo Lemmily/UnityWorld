@@ -21,9 +21,9 @@ public class Economy : MonoBehaviour {
 
         //Create Businesses
         businessList = new List<Business>();
-        businessList.Add(new Business("Emily's Ripe Peaches", Resource.POTTERY));
-        businessList.Add(new Business("Emily's Sour Plums", Resource.IRON));
-        businessList.Add(new Business("Emily's Spicy Nachos", Resource.UNKNOWN));
+        businessList.Add(new Business("Emily's Ripe Peaches", resources["manufactured"]));
+        businessList.Add(new Business("Emily's Sour Plums", resources["luxury"]));
+        businessList.Add(new Business("Emily's Spicy Nachos", resources["processed"]));
 
     }
 	
