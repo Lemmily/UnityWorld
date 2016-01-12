@@ -5,11 +5,14 @@ using System;
 public class Request  {
 
     private bool  buy;
+    private int quantity;
     private Resource resource;
 
-    public Request(bool buy, Resource res) {
+    public Request(bool buy, Resource res, int quantity) {
         this.buy = buy;
-        resource = res;
+        this.resource = res;
+        this.quantity = quantity;
+
     }
 
     internal bool isBuy() {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System;
 using System.Xml;
+using System.Xml.Linq;
 
 public class Economy : MonoBehaviour {
     private int points;
@@ -11,26 +12,67 @@ public class Economy : MonoBehaviour {
     private Dictionary<String, Resource> resources;
     // Use this for initialization
     void Start () {
-        parseResources();
         points = 0;
+
+        resources = new Dictionary<string, Resource>();
+        parseResources();
+
         auctionByType = new Dictionary<Resource, Auction>();
         auctions = new List<Auction>();
-
-
-        foreach (Resource res in Enum.GetValues(typeof(Resource))) {
+        foreach (Resource res in resources.Values) {
             Auction auc = new Auction(res, true);
         }
 	}
 
     private void parseResources() {
         // Get the file into the document.
-        //XmlDocument root = new XmlDocument();
-        //root.Load();
+        TextAsset _xml = Resources.Load<TextAsset>("Scripts/resources.xml");
 
-        //language = root.SelectSingleNode("localizableStrings/meta/language").InnerText;
-        //grouping = root.SelectSingleNode("localizableStrings/meta/grouping").InnerText;
+        //XDocument root = XDocument.Load("Scripts/resources.xml");
+        XmlDocument xmDoc = new XmlDocument();
+        xmDoc.Load("Assets/Resources/Scripts/resources.xml");
 
-        //"resources.xml"
+        var rootXml = xmDoc.DocumentElement.GetEnumerator();
+        foreach(XmlNode xmlNode in xmDoc.DocumentElement) {
+            if (xmlNode == null) {
+                continue;
+            }
+            Resource res = new Resource(xmlNode.Name);
+            if (xmlNode.Attributes.Count > 0) {
+
+            }
+            Debug.Log(xmlNode.Name + "=======================");
+            foreach (XmlNode n in xmlNode.ChildNodes) {
+                Debug.Log(n.Name);
+                Debug.Log(n.Attributes.ToString());
+                switch (n.Name) {
+                    case "location":
+                        res.location = n.InnerText;
+                        break;
+                    case "need":
+                        res.needs.Add(n.Attributes["type"].Value, int.Parse(n.Attributes["amount"].Value));
+                        break;
+                    case "output":
+                        res.output = float.Parse(n.InnerText);
+                        break;
+                    case "time":
+                        res.time = float.Parse(n.InnerText);
+                        break;
+                    case "byproduct":
+                        res.byproducts.Add(n.Attributes["type"].Value, new Dictionary<string, float>());
+                        res.byproducts[n.Attributes["type"].Value].Add("chance", float.Parse(n.Attributes["chance"].Value));
+                        res.byproducts[n.Attributes["type"].Value].Add("amount", float.Parse(n.Attributes["amount"].Value));
+                        break;
+                    default:
+                        break;
+                }
+            }
+            Debug.Log(res.ToString());
+            resources.Add(res.name, res);
+            
+            Debug.Log("=============================");
+        }
+        
     }
 
     // Update is called once per frame
