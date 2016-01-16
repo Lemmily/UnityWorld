@@ -17,12 +17,7 @@ public class Economy : MonoBehaviour {
     void Start () {
         points = 0;
 
-        //Create Businesses
-        businessList = new List<Business>();
-        businessList.Add(new Business("Emily's Ripe Peaches", resources["raw"]));
-        //businessList.Add(new Business("Emily's Sour Plums", resources["luxury"]));
-        //businessList.Add(new Business("Emily's Spicy Nachos", resources["processed"]));
-
+ 
         resources = new Dictionary<string, Resource>();
         parseResources();
 
@@ -31,7 +26,11 @@ public class Economy : MonoBehaviour {
         foreach (Resource res in resources.Values) {
             Auction auc = new Auction(res, true);
         }
-	}
+
+
+
+        createBusinesses();
+    }
 
     private void parseResources() {
         // Get the file into the document.
@@ -92,7 +91,7 @@ public class Economy : MonoBehaviour {
             int count = auctions.Count;
             for (var i = 0; i < count; i++) auctions[i].Update(points);
         }
-        foreach (Resource res in Enum.GetValues(typeof(Resource)))
+        foreach (Resource res in resources.Values)
         {
             Auction auc = new Auction(res, true);
         }
@@ -107,7 +106,14 @@ public class Economy : MonoBehaviour {
         }
     }
 
-
+    private void createBusinesses()
+    {
+        //Create Businesses
+        businessList = new List<Business>();
+        businessList.Add(new Business("Emily's Ripe Peaches", resources["raw"]));
+        //businessList.Add(new Business("Emily's Sour Plums", resources["luxury"]));
+        //businessList.Add(new Business("Emily's Spicy Nachos", resources["processed"]));
+    }
     ////temp I think.
     //public enum Resource
     //{
