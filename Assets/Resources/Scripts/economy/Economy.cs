@@ -10,6 +10,9 @@ public class Economy : MonoBehaviour {
     private Dictionary<Resource, Auction> auctionByType;
     private int updateSpeed = 5;
     private Dictionary<String, Resource> resources;
+
+    public Trader traderOne;
+    public Trader traderTwo;
     // Use this for initialization
     void Start () {
         points = 0;
@@ -21,6 +24,22 @@ public class Economy : MonoBehaviour {
         auctions = new List<Auction>();
         foreach (Resource res in resources.Values) {
             Auction auc = new Auction(res, true);
+            auctionByType.Add(res, auc);
+            auctions.Add(auc);
+        }
+
+        foreach (Resource res in resources.Values) {
+            for (int i = 0; i < UnityEngine.Random.value * 10; i++) {
+                int price = UnityEngine.Random.Range(1, 100); //(int)UnityEngine.Random.value * 100;
+                int quantity = UnityEngine.Random.Range(1, 10); // (int)UnityEngine.Random.value * 10;
+                bool buy = (UnityEngine.Random.Range(0, 10) < 5);
+
+                if (UnityEngine.Random.Range(0,10) < 5) {
+                    auctionByType[res].addRequest(new Request(traderOne, buy, res, quantity, price));
+                } else {
+                    auctionByType[res].addRequest(new Request(traderTwo, buy, res, quantity, price));
+                }
+            }
         }
 	}
 
@@ -34,12 +53,12 @@ public class Economy : MonoBehaviour {
 
         var rootXml = xmDoc.DocumentElement.GetEnumerator();
         foreach(XmlNode xmlNode in xmDoc.DocumentElement) {
-            if (xmlNode == null) {
-                continue;
+            if (xmlNode == null || xmlNode.Attributes == null) {
+                break;
             }
             Resource res = new Resource(xmlNode.Name);
             if (xmlNode.Attributes.Count > 0) {
-
+                
             }
             Debug.Log(xmlNode.Name + "=======================");
             foreach (XmlNode n in xmlNode.ChildNodes) {
@@ -74,20 +93,17 @@ public class Economy : MonoBehaviour {
         }
         
     }
-
-    // Update is called once per frame
-    void Update () {
-
-        //by default only updates every 5 time units.
-        if (points > updateSpeed) {
-            int count = auctions.Count;
-            for (var i = 0; i < count; i++) auctions[i].Update(points);
-        }
-}
-
+     
     public void gainActionPoints(int points) {
         Debug.Log("Economy gained points");
         this.points += points;
+        //by default only updates every 5 time units.
+        if (this.points > updateSpeed) {
+            int count = auctions.Count;
+            for (var i = 0; i < count; i++)
+                auctions[i].Update(1);
+            this.points -= updateSpeed;
+        }
     }
 
 
