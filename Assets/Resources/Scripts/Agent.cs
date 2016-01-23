@@ -3,9 +3,10 @@ using System.Collections;
 
 public class Agent : MonoBehaviour {
     int points = 0;
+    Trader trader;
 	// Use this for initialization
 	void Start () {
-	
+        trader = this.gameObject.AddComponent<Trader>();
 	}
 	
 	// Update is called once per frame
