@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine;
 
+[RequireComponent(typeof(MapInfo))]
 public class WorldGenerator : MonoBehaviour {
 
 

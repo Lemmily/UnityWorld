@@ -60,10 +60,10 @@ public class Economy : MonoBehaviour {
             if (xmlNode.Attributes.Count > 0) {
                 
             }
-            Debug.Log(xmlNode.Name + "=======================");
+            //Debug.Log(xmlNode.Name + "=======================");
             foreach (XmlNode n in xmlNode.ChildNodes) {
-                Debug.Log(n.Name);
-                Debug.Log(n.Attributes.ToString());
+                //Debug.Log(n.Name);
+                //Debug.Log(n.Attributes.ToString());
                 switch (n.Name) {
                     case "location":
                         res.location = n.InnerText;
@@ -86,10 +86,10 @@ public class Economy : MonoBehaviour {
                         break;
                 }
             }
-            Debug.Log(res.ToString());
+            //Debug.Log(res.ToString());
             resources.Add(res.name, res);
             
-            Debug.Log("=============================");
+            ///Debug.Log("=============================");
         }
         
     }

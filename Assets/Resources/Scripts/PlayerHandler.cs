@@ -4,14 +4,15 @@ using System;
 
 public class PlayerHandler : MonoBehaviour {
     private MapInfo mapInfo;
-    private VisualTiles visualTiles;
     private WorldTime worldTime;
 
     // Use this for initialization
     void Start () {
         mapInfo = GetComponent<MapInfo>();
         worldTime = GetComponent<WorldTime>();
-        visualTiles = GetComponent<VisualTiles>();
+        if (worldTime == null) {
+            worldTime = GetComponentInParent<WorldTime>();
+        }
     }
 
     // Update is called once per frame
@@ -29,23 +30,30 @@ public class PlayerHandler : MonoBehaviour {
             MeshCollider meshCollider = hit.collider as MeshCollider;
             if (renderer == null || renderer.sharedMaterial == null || renderer.sharedMaterial.mainTexture == null || meshCollider == null)
                 return;
+            else {
+
+                mapInfo = (! mapInfo.Equals(meshCollider.gameObject.GetComponent<MapInfo>()) ? meshCollider.gameObject.GetComponent<MapInfo>() : mapInfo );
+            }
 
             Texture tex = renderer.material.mainTexture;
-            Vector2 point = visualTiles.findCoord(transform.InverseTransformPoint(hit.point));
-            print(hit.textureCoord + " is - " + point);
+            Vector2 point = mapInfo.findCoord(transform.InverseTransformPoint(hit.point));
+            print(hit.textureCoord + " is - " + point + "On map " + mapInfo.GetName());
             if (Input.GetMouseButtonDown(1)) {
                 //mapInfo.SetTile(point, 1);
                 //mapInfo.ChangeTileBy(point, 1);
-                visualTiles.UpdateMesh();
+                mapInfo.DoMeshUpdate();
             }
         }
         else if (Input.GetMouseButtonDown(0)) {
             RaycastHit hit;
             if (!Physics.Raycast(FindObjectOfType<Camera>().ScreenPointToRay(Input.mousePosition), out hit))
                 return;
+            else
+                mapInfo = (!mapInfo.Equals(hit.collider.gameObject.GetComponent<MapInfo>()) ? hit.collider.gameObject.GetComponent<MapInfo>() : mapInfo);
 
-            Vector2 point = visualTiles.findCoord(transform.InverseTransformPoint(hit.point));
-            GetComponent<WorldGenerator>().addHill(30, 30, (int)point.x, (int)point.y);
+
+            Vector2 point = mapInfo.findCoord(transform.InverseTransformPoint(hit.point));
+            GetComponent<MapType>().MouseClick(0);
         }
         else if (Input.GetMouseButtonDown(2)) {
             //mapInfo.GenerateMap();
@@ -53,13 +61,16 @@ public class PlayerHandler : MonoBehaviour {
 
             GetComponentInChildren<WorldGenerator>().applyMask();
             GetComponentInChildren<WorldGenerator>().commit();
-            visualTiles.UpdateMesh();
+            mapInfo.DoMeshUpdate();
         }
         /// KEYBOARD HANDLERS
         /// 
         if (Input.GetKeyDown(KeyCode.A) ){
             //do  dummyturn
             worldTime.advanceTime(10);
+        }
+        else if (Input.GetKeyDown(KeyCode.Space)) {
+            worldTime.TogglePause();
         }
     }
 
