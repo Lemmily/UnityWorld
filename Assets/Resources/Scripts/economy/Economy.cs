@@ -30,7 +30,7 @@ public class Economy : MonoBehaviour {
             auctionByType.Add(res, auc);
             auctions.Add(auc);
         }
-
+        createBusinesses();
         foreach (Resource res in resources.Values) {
             for (int i = 0; i < UnityEngine.Random.value * 10; i++) {
                 int price = UnityEngine.Random.Range(1, 100); //(int)UnityEngine.Random.value * 100;
@@ -121,7 +121,7 @@ public class Economy : MonoBehaviour {
                 auctions[i].Update(1);
             this.points -= updateSpeed;
         }
-    }
+    
         foreach(Business b in businessList)
         {
             b.gainActionPoints(points);
