@@ -29,18 +29,20 @@ public class MapInfo : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        tileSizeX =  resolutionX / width;
-        tileSizeY = resolutionY / height;
+        tileSizeX =  (float)resolutionX / (float)width;
+        tileSizeY = (float)resolutionY / (float)height;
 
         map = new int[width,height];
         layers = new Dictionary<string, int[,]>();
+        layers.Add("terrain", map);
+
 
         visualLayers = new Dictionary < string, VisualTiles>();
         GameObject gObj = new GameObject("TerrainVisualTiles");
         gObj.transform.parent = gameObject.transform;
         VisualTiles vTiles = gObj.AddComponent<VisualTiles>();
-        vTiles.SetMapInfo(this);
-        vTiles.BuildTerrainMesh();
+        vTiles.Setup(this, "terrain");
+        vTiles.BuildMesh();
         visualLayers.Add("Terrain", vTiles);
         gObj.GetComponent<MeshRenderer>().sharedMaterial = terrainMat;
 
@@ -48,8 +50,8 @@ public class MapInfo : MonoBehaviour {
         gObj.transform.parent = gameObject.transform;
         gObj.transform.localPosition = new Vector3(0, 0, -0.1f);
         vTiles = gObj.AddComponent<VisualTiles>();
-        vTiles.SetMapInfo(this);
-        vTiles.BuildTerrainMesh();
+        vTiles.Setup(this, "entity");
+        vTiles.BuildMesh();
         visualLayers.Add("Entities", vTiles);
         gObj.GetComponent<MeshRenderer>().sharedMaterial = entityMat;
 
@@ -64,6 +66,10 @@ public class MapInfo : MonoBehaviour {
 	}
 
     public Vector2 findCoord(Vector3 point) {
+        return findCoord(new Vector2(point.x, point.y));
+    }
+
+    public Vector2 findCoord(Vector2 point) {
         float x = point.x - this.gameObject.transform.localPosition.x;
         float y = point.y - this.gameObject.transform.localPosition.y;
         return new Vector2((int)(x / tileSizeX), (int)(y / tileSizeY));
@@ -75,16 +81,32 @@ public class MapInfo : MonoBehaviour {
         } else {
             layers.Add(name, layer);
         }
+        updating = true;
     }
+
+    //internal void setMap(string layer, int[,] setMap) {
+    //    if (layers.ContainsKey(layer)) {
+    //        layers[layer] = setMap;
+    //    }
+    //    else {
+    //        layers.Add(layer, setMap);
+    //    }
+    //    updating = true;
+    //}
 
     internal int getTile(int x, int y) {
         return map[x, y];
     }
 
-    internal void setMap(int[,] setMap) {
-        map = setMap;
-        updating = true;
+    internal int getTile(int x, int y, string layer) {
+        if (layers.ContainsKey(layer))
+            return layers[layer][x, y];
+        else {
+            Debug.Log(this + "  tried to fetch a layer that doesnt exist: " + layer);
+            return -1;
+        }
     }
+
 
     internal void DoMeshUpdate() {
         if (!finished) {
@@ -98,4 +120,5 @@ public class MapInfo : MonoBehaviour {
     internal string GetName() {
         return mapName;
     }
+
 }

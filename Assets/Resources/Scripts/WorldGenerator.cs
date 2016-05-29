@@ -41,7 +41,6 @@ public class WorldGenerator : MonoBehaviour {
 
     public void commit() {
         commit("terrain");
-        mapInfo.setMap(setMap);
     }
 
     public void commit(string layer) {

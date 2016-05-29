@@ -17,7 +17,7 @@ public class Farm : MapType
         
     }
 
-    public override void MouseClick(int clickType) {
-        Debug.Log(mapInfo.mapName + " got cliked with " + clickType);
-    }
+    //public new void MouseClick(int clickType, Vector2 tileCoord) {
+    //    Debug.Log(mapInfo.mapName + " got cliked with " + clickType);
+    //}
 }

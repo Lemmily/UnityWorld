@@ -10,7 +10,7 @@ public class VisualTiles : MonoBehaviour {
     public MapInfo mapInfo;
     private float tileSizeX;
     private float tileSizeY;
-       
+    private string layer;
 
     void Start() {
         meshFilter = GetComponent<MeshFilter>();
@@ -24,22 +24,22 @@ public class VisualTiles : MonoBehaviour {
         }
     }
 
-    internal void SetMapInfo(MapInfo mapInfo) {
+    internal void Setup(MapInfo mapInfo, string layer) {
         this.mapInfo = mapInfo;
+        this.layer = layer;
         tileSizeX = mapInfo.tileSizeX;
         tileSizeY = mapInfo.tileSizeY;
-    }
 
-    private void BuildMesh(Mesh mesh) {
-        if (mapInfo == null) {
-            Debug.Log("MapInfo is null for " + gameObject.name);
-        }
+
         if (meshFilter == null) {
             meshFilter = GetComponent<MeshFilter>();
             if (meshFilter == null) {
                 meshFilter = gameObject.AddComponent<MeshFilter>();
             }
         }
+    }
+
+    private void BuildMesh(Mesh mesh) {
         int numTiles = mapInfo.width * mapInfo.height;
         int numTriangles = numTiles * 6;
         int numVerts = numTiles * 4;
@@ -81,7 +81,7 @@ public class VisualTiles : MonoBehaviour {
         terrainMesh = mesh;
     }
 
-    public void BuildTerrainMesh() {
+    public void BuildMesh() {
         BuildMesh(terrainMesh);
         MeshCollider meshC = gameObject.AddComponent<MeshCollider>();
         //meshC.sharedMesh = null;
@@ -105,7 +105,7 @@ public class VisualTiles : MonoBehaviour {
 
         for (int x = 0; x < mapInfo.width; x++) {
             for (int y = 0; y < mapInfo.height; y++) {
-                int tileType = mapInfo.getTile(x, y);
+                int tileType = mapInfo.getTile(x, y, layer);
                 Vector2[] UVLocs = GetUVForTile(tileType);
                 UVArray[iVertCount + 0] = UVLocs[0]; //Top left of tile in atlas
                 UVArray[iVertCount + 1] = UVLocs[1]; //Top right of tile in atlas
@@ -117,7 +117,7 @@ public class VisualTiles : MonoBehaviour {
 
         meshFilter.mesh.uv = UVArray;
     }
-    
+
     private Vector2[] GetUVForTile(int tileType) {
         Vector2[] tempUV = new Vector2[4];
         float tileH = 1f / 4;
