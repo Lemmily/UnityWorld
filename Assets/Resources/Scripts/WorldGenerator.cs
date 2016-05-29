@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine;
 
+[RequireComponent(typeof(MapInfo))]
 public class WorldGenerator : MonoBehaviour {
 
 
@@ -40,7 +41,6 @@ public class WorldGenerator : MonoBehaviour {
 
     public void commit() {
         commit("terrain");
-        mapInfo.setMap(setMap);
     }
 
     public void commit(string layer) {
