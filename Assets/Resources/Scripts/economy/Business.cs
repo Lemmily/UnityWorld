@@ -4,8 +4,8 @@ using System.Collections.Generic;
 public class Business{
     private string businessName = "";
     private Resource productionResource;
-    private int resourceQuantity = 0;
-    private int points;
+    private float resourceQuantity = 0;
+    private float points;
     private int updateSpeed = 5;
     private Dictionary<Resource,double> resources = null;   //Dictionary of Resources held by business, <name,quantity>
 
@@ -40,20 +40,22 @@ public class Business{
 
     public void gainActionPoints(int points)
     {
+        Debug.Log(this.points + " / +" + points);
         Debug.Log(businessName + " gained " + points + " points.");
         this.points += points;
-        if(this.points >= updateSpeed)
-        {
-            produceResource(1);
-            this.points -= updateSpeed;
+        if(this.points >= productionResource.time) {
+            Debug.Log(this.points + " / -" + productionResource.time);
+            produceResource(productionResource.output);
+            this.points -= productionResource.time;
         }
+
     }
 
-    void produceResource(int q)
+    void produceResource(float q)
     {
         resourceQuantity += q;
         Debug.Log(businessName + ": Produced " + q + " new " + productionResource.name);
-        Debug.Log(businessName + ": Currently has " + resourceQuantity + " " + productionResource.name  );
+        Debug.Log(businessName + ": Currently has " + resourceQuantity + " " + productionResource.name );
     }
 
 }

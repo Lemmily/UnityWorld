@@ -8,7 +8,7 @@ public class PlayerHandler : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        mapInfo = WorldController.Instance.GetCurrentMapInfo();
+       // mapInfo = WorldController.Instance.GetCurrentMapInfo();
         worldTime = GetComponent<WorldTime>();
         if (worldTime == null) {
             worldTime = GetComponentInParent<WorldTime>();
