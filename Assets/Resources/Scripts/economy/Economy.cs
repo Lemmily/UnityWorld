@@ -44,6 +44,7 @@ public class Economy : MonoBehaviour {
                 }
             }
         }
+        createBusinesses();
 	}
 
     private void parseResources() {
@@ -121,7 +122,7 @@ public class Economy : MonoBehaviour {
                 auctions[i].Update(1);
             this.points -= updateSpeed;
         }
-    }
+
         foreach(Business b in businessList)
         {
             b.gainActionPoints(points);
