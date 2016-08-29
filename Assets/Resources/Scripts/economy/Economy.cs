@@ -8,7 +8,7 @@ public class Economy : MonoBehaviour {
     private int points;
     private List<Auction> auctions;
     private Dictionary<Resource, Auction> auctionByType;
-    private int updateSpeed = 5;
+    private int updateSpeed = 5; //this is how many time units the economy needs to pass before doing something.
 
     private List<Business> businessList = null;
     private Dictionary<String, Resource> resources;
@@ -98,20 +98,6 @@ public class Economy : MonoBehaviour {
         
     }
 
-    // Update is called once per frame
-    void Update () {
-        //by default only updates every 5 time units.
-
-        if (points > updateSpeed) {
-            int count = auctions.Count;
-            for (var i = 0; i < count; i++) auctions[i].Update(points);
-        }
-        foreach (Resource res in resources.Values)
-        {
-            Auction auc = new Auction(res, true);
-        }
-    }
-
     public void gainActionPoints(int points) {
         Debug.Log("Economy gained points");
         this.points += points;
@@ -121,11 +107,6 @@ public class Economy : MonoBehaviour {
             for (var i = 0; i < count; i++)
                 auctions[i].Update(1);
             this.points -= updateSpeed;
-        }
-
-        foreach(Business b in businessList)
-        {
-            b.gainActionPoints(points);
         }
     }
 

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
-public class MapInfo : MonoBehaviour {
+public class MapInfo {
     public int width;
     public int height;
     public bool updating;
@@ -28,36 +28,40 @@ public class MapInfo : MonoBehaviour {
     //private List<VisualTiles> visualLayers;
 
     // Use this for initialization
-    void Start () {
+    public MapInfo(int width, int height) {
+
+        this.width = width;
+        this.height = height;
         tileSizeX =  (float)resolutionX / (float)width;
         tileSizeY = (float)resolutionY / (float)height;
 
         map = new int[width,height];
         layers = new Dictionary<string, int[,]>();
         layers.Add("terrain", map);
+        layers.Add("entity", map);
 
 
-        visualLayers = new Dictionary < string, VisualTiles>();
-        GameObject gObj = new GameObject("TerrainVisualTiles");
-        gObj.transform.parent = gameObject.transform;
-        VisualTiles vTiles = gObj.AddComponent<VisualTiles>();
-        vTiles.Setup(this, "terrain");
-        vTiles.BuildMesh();
-        visualLayers.Add("Terrain", vTiles);
-        gObj.GetComponent<MeshRenderer>().sharedMaterial = terrainMat;
+        //visualLayers = new Dictionary < string, VisualTiles>();
+        //GameObject gObj = new GameObject("TerrainVisualTiles");
+        //gObj.transform.parent = gameObject.transform;
+        //VisualTiles vTiles = gObj.AddComponent<VisualTiles>();
+        //vTiles.Setup(this, "terrain");
+        //vTiles.BuildMesh();
+        //visualLayers.Add("Terrain", vTiles);
+        //gObj.GetComponent<MeshRenderer>().sharedMaterial = terrainMat;
 
-        gObj = new GameObject("EntityVisualTiles");
-        gObj.transform.parent = gameObject.transform;
-        gObj.transform.localPosition = new Vector3(0, 0, -0.1f);
-        vTiles = gObj.AddComponent<VisualTiles>();
-        vTiles.Setup(this, "entity");
-        vTiles.BuildMesh();
-        visualLayers.Add("Entities", vTiles);
-        gObj.GetComponent<MeshRenderer>().sharedMaterial = entityMat;
+        //gObj = new GameObject("EntityVisualTiles");
+        //gObj.transform.parent = gameObject.transform;
+        //gObj.transform.localPosition = new Vector3(0, 0, -0.1f);
+        //vTiles = gObj.AddComponent<VisualTiles>();
+        //vTiles.Setup(this, "entity");
+        //vTiles.BuildMesh();
+        //visualLayers.Add("Entities", vTiles);
+        //gObj.GetComponent<MeshRenderer>().sharedMaterial = entityMat;
 
 
         finished = true;
-        DoMeshUpdate();
+        //DoMeshUpdate();
     }
 	
 	// Update is called once per frame
@@ -65,15 +69,15 @@ public class MapInfo : MonoBehaviour {
 	
 	}
 
-    public Vector2 findCoord(Vector3 point) {
-        return findCoord(new Vector2(point.x, point.y));
-    }
+    //public Vector2 findCoord(Vector3 point) {
+    //    return findCoord(new Vector2(point.x, point.y));
+    //}
 
-    public Vector2 findCoord(Vector2 point) {
-        float x = point.x - this.gameObject.transform.localPosition.x;
-        float y = point.y - this.gameObject.transform.localPosition.y;
-        return new Vector2((int)(x / tileSizeX), (int)(y / tileSizeY));
-    }
+    //public Vector2 findCoord(Vector2 point) {
+    //    float x = point.x - this.gameObject.transform.localPosition.x;
+    //    float y = point.y - this.gameObject.transform.localPosition.y;
+    //    return new Vector2((int)(x / tileSizeX), (int)(y / tileSizeY));
+    //}
 
     public void setLayer(string name, int[,] layer) {
         if (layers.ContainsKey(name)) {
@@ -83,7 +87,6 @@ public class MapInfo : MonoBehaviour {
         }
         updating = true;
     }
-
     //internal void setMap(string layer, int[,] setMap) {
     //    if (layers.ContainsKey(layer)) {
     //        layers[layer] = setMap;
