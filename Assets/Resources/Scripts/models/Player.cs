@@ -3,6 +3,7 @@ using System.Collections;
 using System;
 
 public class Player {
+
     public int x
     {
         get;
@@ -26,7 +27,6 @@ public class Player {
         this.y = y;
     }
 
-
     public void Move(int dx, int dy) {
         //no checks - they are done PRIOR to this!
         x += dx;
@@ -38,6 +38,7 @@ public class Player {
     public void RegisterPlayerMovedCallback(Action<Player> callback) {
         cbPlayerMoved += callback;
     }
+
     public void UnRegisterPlayerMovedCallback(Action<Player> callback) {
         cbPlayerMoved -= callback;
     }

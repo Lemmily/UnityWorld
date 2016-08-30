@@ -11,7 +11,6 @@ public enum Direction
 }
 public class PlayerController : MonoBehaviour {
 
-
     World world
     {
         get
@@ -20,11 +19,9 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
-
     public static PlayerController Instance;
     public Player player;
     private GameObject player_go;
-
 
 	void Start () {
         Instance = this;
@@ -39,13 +36,10 @@ public class PlayerController : MonoBehaviour {
         player.RegisterPlayerMovedCallback(DrawPlayer);
 	}
 
-
     // Update is called once per frame
     void Update () {
 
     }
-
-
 
     private void DrawPlayer(Player player) {
         //drew player
@@ -55,8 +49,6 @@ public class PlayerController : MonoBehaviour {
         SpriteRenderer sr = player_go.GetComponent<SpriteRenderer>();
         sr.sprite = ResourceLoader.GetPlayerSprite(player);
     }
-
-
 
     public bool IsValidMove(Direction dir) {
         switch (dir) {
@@ -82,9 +74,8 @@ public class PlayerController : MonoBehaviour {
                 break;
             default:
                 return false;
-
-
         }
         return false;
     }
+    
 }

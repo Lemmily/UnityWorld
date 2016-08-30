@@ -54,8 +54,12 @@ public class TileSpriteController : MonoBehaviour {
 
         World.RegisterTileChanged(OnTileChanged);
         PlayerController.Instance.player.RegisterPlayerMovedCallback(OnPlayerMoved);
+
+
+        // does this need to be called here?
+
+        OnPlayerMoved(PlayerController.player);
 	}
-	
 
 
     void OnTileChanged(Tile tile_data) {
@@ -63,18 +67,20 @@ public class TileSpriteController : MonoBehaviour {
     }
 
     void OnPlayerMoved(Player player) {
+        //Is this actually bing called?
+        //are there tiles being generated?
+        //are they in the wrong place?
+        //is the camera start/end points correct?
 
         //camera has already been updated.
         Vector3 start = Camera.main.ScreenToWorldPoint(Vector3.zero);
         Vector3 end = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0));
-
 
         //"redraw" tiles.
 
         List<GameObject> old_active_go = new List<GameObject>(activeObjects);
 
         activeObjects = new List<GameObject>();
-        
 
         for (int x = (int)start.x; x < end.x ; x++) {
             for (int y = (int)end.y; y < end.y; y++) {
@@ -97,12 +103,11 @@ public class TileSpriteController : MonoBehaviour {
                 sr.sprite = ResourceLoader.GetTileSprite(tile_data);
             }
         }
-        
+
         foreach (GameObject go in old_active_go) {
             go.SetActive(false);
             deactivatedObjects.Push(go);
         }
-
     }
 
     private void CreateNewBatch() {
@@ -113,6 +118,6 @@ public class TileSpriteController : MonoBehaviour {
             deactivatedObjects.Push(go);
             go.transform.SetParent(tile_container.transform);
         }
-        
+
     }
 }
