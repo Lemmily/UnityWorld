@@ -9,7 +9,7 @@ public class TileSpriteController : MonoBehaviour {
     private Dictionary<Tile, GameObject> tileGameObjectMap;
 
 
-    private List<GameObject> activeObjects;
+    private Stack<GameObject> activeObjects;
 
     private Stack<GameObject> deactivatedObjects;
     GameObject tile_container;
@@ -30,12 +30,11 @@ public class TileSpriteController : MonoBehaviour {
         }
 
         deactivatedObjects = new Stack<GameObject>();
-        activeObjects = new List<GameObject>();
+        activeObjects = new Stack<GameObject>();
 
         tileGameObjectMap = new Dictionary<Tile, GameObject>();
-        GameObject tile_container = new GameObject();
 
-
+        tile_container = new GameObject();
         tile_container.transform.SetParent(this.transform);
         tile_container.name = "Tiles";
 
@@ -58,7 +57,7 @@ public class TileSpriteController : MonoBehaviour {
 
         // does this need to be called here?
 
-        OnPlayerMoved(PlayerController.player);
+        OnPlayerMoved(PlayerController.Instance.player);
 	}
 
 
@@ -76,19 +75,21 @@ public class TileSpriteController : MonoBehaviour {
         Vector3 start = Camera.main.ScreenToWorldPoint(Vector3.zero);
         Vector3 end = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0));
 
+        Debug.Log(start + ", " + end);
         //"redraw" tiles.
 
-        List<GameObject> old_active_go = new List<GameObject>(activeObjects);
+        Stack<GameObject> old_active_go = new Stack<GameObject>(activeObjects);
 
-        activeObjects = new List<GameObject>();
+        activeObjects = new Stack<GameObject>();
 
-        for (int x = (int)start.x; x < end.x ; x++) {
-            for (int y = (int)end.y; y < end.y; y++) {
+        for (int x = (int)start.x - 1; x < end.x + 1 ; x++) {
+            for (int y = (int)start.y - 1; y < end.y + 1; y++) {
                 Tile tile_data = WorldController.Instance.world.GetTileAt(x, y);
+                if (tile_data == null)
+                    continue;
                 GameObject go;
                 if (old_active_go.Count > 0) {
-                    go = old_active_go[old_active_go.Count - 1];
-                    old_active_go.Remove(gameObject);
+                    go = old_active_go.Pop();
                 } else {
                     if (deactivatedObjects.Count == 0) {
                         CreateNewBatch();
@@ -101,6 +102,7 @@ public class TileSpriteController : MonoBehaviour {
 
                 SpriteRenderer sr = go.GetComponent<SpriteRenderer>();
                 sr.sprite = ResourceLoader.GetTileSprite(tile_data);
+                activeObjects.Push(go);
             }
         }
 
@@ -113,10 +115,12 @@ public class TileSpriteController : MonoBehaviour {
     private void CreateNewBatch() {
         for (int i = 0; i < 10; i++) {
             GameObject go = new GameObject();
+            go.SetActive(false);
             SpriteRenderer sr = go.AddComponent<SpriteRenderer>();
             sr.sortingLayerName = "Tiles";
             deactivatedObjects.Push(go);
             go.transform.SetParent(tile_container.transform);
+            go.name = "unused_tile";
         }
 
     }
