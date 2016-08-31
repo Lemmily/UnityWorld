@@ -30,10 +30,10 @@ public class KeyboardController : MonoBehaviour {
         }
     }
 	// Use this for initialization
-	void Start () { 
+	void Start () {
         Instance = this;
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
 	    if(Input.GetKeyUp(KeyCode.UpArrow) || Input.GetKeyUp(KeyCode.W)) {
@@ -63,23 +63,31 @@ public class KeyboardController : MonoBehaviour {
     public void DoMove(Direction dir) {
         //tell camera to move.
         //tellPlayer to move
-
+        int dx, dy;
         switch (dir) {
             case Direction.Up:
-                player.Move(0, 1);
+                dx = 0;
+                dy = 1;
                 break;
             case Direction.Down:
-                player.Move(0, -1);
+                dx = 0;
+                dy = -1;
                 break;
             case Direction.Left:
-                player.Move(-1, 0);
+                dx = -1;
+                dy = 0;
                 break;
             case Direction.Right:
-                player.Move(1, 0);
+                dx = 1;
+                dy = 0;
                 break;
             default:
                 break;
         }
+        player.Move(dx, dy);
+        Camera.main.transform.Translate(dx, dy, 0);
+        //TODO: constrain the camera to map. (need to think about ..
+        // ..map potentially being smaller that the screen)
         Debug.Log("tried to move " + dir);
     }
 
