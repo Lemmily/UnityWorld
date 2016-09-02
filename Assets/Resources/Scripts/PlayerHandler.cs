@@ -4,14 +4,14 @@ using System;
 
 public class PlayerHandler : MonoBehaviour {
     private MapInfo mapInfo;
-    private WorldTime worldTime;
+    private WorldTimeController worldTimeController;
 
     // Use this for initialization
     void Start () {
        // mapInfo = WorldController.Instance.GetCurrentMapInfo();
-        worldTime = GetComponent<WorldTime>();
-        if (worldTime == null) {
-            worldTime = GetComponentInParent<WorldTime>();
+        worldTimeController = GetComponent<WorldTimeController>();
+        if (worldTimeController == null) {
+            worldTimeController = GetComponentInParent<WorldTimeController>();
         }
     }
 
@@ -25,7 +25,7 @@ public class PlayerHandler : MonoBehaviour {
     //        RaycastHit hit;
     //        if (!Physics.Raycast(FindObjectOfType<Camera>().ScreenPointToRay(Input.mousePosition), out hit))
     //            return;
-            
+
     //        Renderer renderer = hit.collider.GetComponent<Renderer>();
     //        MeshCollider meshCollider = hit.collider as MeshCollider;
     //        if ( renderer == null || renderer.sharedMaterial == null || renderer.sharedMaterial.mainTexture == null || meshCollider == null)
@@ -80,13 +80,13 @@ public class PlayerHandler : MonoBehaviour {
     //    Camera.main.orthographicSize = Mathf.Clamp(Camera.main.orthographicSize, 3, 25);
 
     //    /// KEYBOARD HANDLERS
-    //    /// 
+    //    ///
     //    if (Input.GetKeyDown(KeyCode.A) ){
     //        //do  dummyturn
-    //        worldTime.advanceTime(10);
+    //        WorldTimeController.advanceTime(10);
     //    }
     //    else if (Input.GetKeyDown(KeyCode.Space)) {
-    //        worldTime.TogglePause();
+    //        WorldTimeController.TogglePause();
     //    }
     //}
 

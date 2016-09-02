@@ -82,6 +82,8 @@ public class KeyboardController : MonoBehaviour {
                 dy = 0;
                 break;
             default:
+                dx = 0;
+                dy = 0;
                 break;
         }
         player.Move(dx, dy);
@@ -90,6 +92,8 @@ public class KeyboardController : MonoBehaviour {
         // ..map potentially being smaller that the screen)
         Debug.Log("tried to move " + dir);
     }
+
+
 
 
 }
