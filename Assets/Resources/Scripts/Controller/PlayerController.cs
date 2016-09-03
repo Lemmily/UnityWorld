@@ -21,7 +21,7 @@ public class PlayerController : MonoBehaviour {
 
     public static PlayerController Instance;
     public Player player;
-    private GameObject player_go;
+    public GameObject player_go;
 
 	void Start () {
         Instance = this;
@@ -48,6 +48,7 @@ public class PlayerController : MonoBehaviour {
         //not sure this is really needed unless there's a sprite change??
         SpriteRenderer sr = player_go.GetComponent<SpriteRenderer>();
         sr.sprite = ResourceLoader.GetPlayerSprite(player);
+        sr.sortingLayerName = "Characters";
     }
 
     public bool IsValidMove(Direction dir) {

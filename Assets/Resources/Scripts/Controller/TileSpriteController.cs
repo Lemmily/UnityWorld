@@ -13,12 +13,13 @@ public class TileSpriteController : MonoBehaviour {
 
     private Stack<GameObject> deactivatedObjects;
 
-    private bool pooling;
+    public bool pooling;
     GameObject tile_container;
 
     private MeshFilter meshFilter;
 
     public int tileSize;
+    public bool setup;
 
     public World World
     {
@@ -39,7 +40,7 @@ public class TileSpriteController : MonoBehaviour {
         tile_container.name = "Tiles";
         pooling = true;
         setup = false;
-        tileSize = 20;
+        tileSize = 1;
 
         World.RegisterTileChanged(OnTileChanged);
 
@@ -69,51 +70,53 @@ public class TileSpriteController : MonoBehaviour {
 
 
     private void DrawWithPooling() {
-          if (! setup) {
-              deactivatedObjects = new Stack<GameObject>();
-              activeObjects = new Stack<GameObject>();
-              tileGameObjectMap = new Dictionary<Tile, GameObject>();
-          }
-          //camera has already been updated.
-          Vector3 start = Camera.main.ScreenToWorldPoint(Vector3.zero);
-          Vector3 end = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0));
+        if (! setup) {
+            deactivatedObjects = new Stack<GameObject>();
+            activeObjects = new Stack<GameObject>();
+            tileGameObjectMap = new Dictionary<Tile, GameObject>();
+            setup = true;
+        }
+        //camera has already been updated.
+        Vector3 start = Camera.main.ScreenToWorldPoint(Vector3.zero);
+        Vector3 end = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0));
 
-          Debug.Log(start + ", " + end);
+        Debug.Log(start + ", " + end);
 
-          //"redraw" tiles.
-          Stack<GameObject> old_active_go = new Stack<GameObject>(activeObjects);
+        //"redraw" tiles.
+        Stack<GameObject> old_active_go = new Stack<GameObject>(activeObjects);
 
-          activeObjects = new Stack<GameObject>();
+        activeObjects = new Stack<GameObject>();
 
-          for (int x = (int)start.x - 1; x < end.x + 1 ; x++) {
-              for (int y = (int)start.y - 1; y < end.y + 1; y++) {
-                  Tile tile_data = WorldController.Instance.world.GetTileAt(x, y);
-                  if (tile_data == null)
-                      continue;
-                  GameObject go;
-                  if (old_active_go.Count > 0) {
-                      go = old_active_go.Pop();
-                  } else {
-                      if (deactivatedObjects.Count == 0) {
-                          CreateNewBatch();
-                      }
-                      go = deactivatedObjects.Pop();
-                  }
-                  go.SetActive(true);
-                  go.name = "Tile_" + x + "_" + y;
-                  go.transform.position = new Vector3(tile_data.x, tile_data.y, 0);
+        for (int x = (int)start.x - 1; x < end.x + 2 ; x++) {
+            for (int y = (int)start.y - 1; y < end.y + 2; y++) {
+                Tile tile_data = WorldController.Instance.world.GetTileAt(x, y);
+                if (tile_data == null)
+                    continue;
 
-                  SpriteRenderer sr = go.GetComponent<SpriteRenderer>();
-                  sr.sprite = ResourceLoader.GetTileSprite(tile_data);
-                  activeObjects.Push(go);
-              }
-          }
+                GameObject go;
+                if (old_active_go.Count > 0) {
+                    go = old_active_go.Pop();
+                } else {
+                    if (deactivatedObjects.Count == 0) {
+                        CreateNewBatch();
+                    }
+                    go = deactivatedObjects.Pop();
+                }
+                go.SetActive(true);
+                go.name = "Tile_" + x + "_" + y;
+                go.transform.position = new Vector3(tile_data.x, tile_data.y, 0);
 
-          foreach (GameObject go in old_active_go) {
-              go.SetActive(false);
-              go.name = "unused_tile";
-              deactivatedObjects.Push(go);
-          }
+                SpriteRenderer sr = go.GetComponent<SpriteRenderer>();
+                sr.sprite = ResourceLoader.GetTileSprite(tile_data);
+                activeObjects.Push(go);
+            }
+        }
+
+        foreach (GameObject go in old_active_go) {
+        go.SetActive(false);
+        go.name = "unused_tile";
+        deactivatedObjects.Push(go);
+        }
     }
 
 
@@ -134,30 +137,42 @@ public class TileSpriteController : MonoBehaviour {
     private void DrawWithMeshes() {
         Vector3 start = Camera.main.ScreenToWorldPoint(Vector3.zero);
         Vector3 end = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0));
-
-        width = end.x - start.x;
-        height = end.y - start.y;
+        
+        Vector2[] UVArray = new Vector2[0];
+        int width = (int)end.x - (int)start.x;
+        int height = (int)end.y - (int)start.y;
         if (! setup) {
             GameObject go = new GameObject();
+            go.transform.SetParent(PlayerController.Instance.player_go.transform);
+            go.transform.localPosition = new Vector3(-width / 2 + 0.5f, -height / 2 + 0.5f, 0);
+            go.AddComponent<MeshRenderer>();
             meshFilter = go.AddComponent<MeshFilter>();
-            meshFilter.mesh = BuildMesh(meshFilter.mesh, width, height);
+            meshFilter.mesh = BuildMesh(meshFilter.mesh, width, height, out UVArray);
+            setup = true;
         }
 
         int iVertCount = 0;
 
-        for (int x = start.x - 1; x < width + 1; x++) {
-            for (int y = start.y - 1; y < height + 1; y++) {
-                int tileType = world.GetTileAt(x,y);
-                Vector2[] UVLocs = GetUVForTile(tileType);
-                UVArray[iVertCount + 0] = UVLocs[0];
-                UVArray[iVertCount + 1] = UVLocs[1];
-                UVArray[iVertCount + 2] = UVLocs[2];
-                UVArray[iVertCount + 3] = UVLocs[3];
-                iVertCount += 4;
+        for (int x = (int)start.x - 1; x < width + 1; x++) {
+            for (int y = (int) start.y - 1; y < height + 1; y++) {
+                Tile t = World.GetTileAt(x, y);
+                if (t == null)
+                    continue;
+                int tileType = t.tileType;
+                try {
+                    Vector2[] UVLocs = GetUVForTile(tileType);
+                    UVArray[iVertCount + 0] = UVLocs[0];
+                    UVArray[iVertCount + 1] = UVLocs[1];
+                    UVArray[iVertCount + 2] = UVLocs[2];
+                    UVArray[iVertCount + 3] = UVLocs[3];
+                    iVertCount += 4;
+                } catch (IndexOutOfRangeException ex) {
+                    Debug.LogError("out of bounds -" + iVertCount);
+                }
             }
         }
 
-        meshFilter.mexh.uv = UVArray;
+        meshFilter.mesh.uv = UVArray;
 
     }
 
@@ -182,8 +197,8 @@ public class TileSpriteController : MonoBehaviour {
     }
 
 
-    private Mesh BuildMesh(Mesh mesh, width, height) {
-        int numTiles = width * height;
+    private Mesh BuildMesh(Mesh mesh, int width, int height, out Vector2[] UVArray ) {
+        int numTiles = (width + 2) * (height + 2);
         int numTriangles = numTiles * 6;
         int numVerts = numTiles * 4;
 
@@ -192,7 +207,7 @@ public class TileSpriteController : MonoBehaviour {
 
         int x, y, iVertCount = 0;
         for (x=0; x < width; x++) {
-          for (y=0; y < height; y++) {
+          for (y=0; y < height ; y++) {
             vertices[iVertCount + 0] = new Vector3(x * tileSize, y * tileSize, 0);
             vertices[iVertCount + 1] = new Vector3(x * tileSize, y * tileSize + tileSize, 0);
             vertices[iVertCount + 2] = new Vector3(x * tileSize + tileSize, y * tileSize + tileSize, 0);
@@ -204,7 +219,7 @@ public class TileSpriteController : MonoBehaviour {
 
         int iIndexCount = 0; iVertCount = 0;
 
-        for (int i = 0; i , numTiles; i++) {
+        for (int i = 0; i < numTiles; i++) {
           triangles[iIndexCount + 0] += (iVertCount + 0);
           triangles[iIndexCount + 1] += (iVertCount + 1);
           triangles[iIndexCount + 2] += (iVertCount + 2);
