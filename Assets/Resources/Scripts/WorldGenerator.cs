@@ -2,33 +2,28 @@
 using System.Collections;
 using UnityEngine;
 
-public class WorldGenerator : MonoBehaviour {
+public class WorldGenerator  {
 
 
     //public VisualTiles tiles;
-    public MapInfo mapInfo;
-    public float seed;
+    public static float seed;
+        // Use this for initialization
+    public static MapInfo Start (MapInfo mapInfo) {
+        UnityEngine.Random.InitState((int)seed);
+        float[,] workingMap = new float[mapInfo.width, mapInfo.height];
+        float[,] maskMap = new float[mapInfo.width, mapInfo.height];
+        int[,] setMap = new int[mapInfo.width, mapInfo.height];
+        firstPass(mapInfo, workingMap);
+        generateMapMask(mapInfo, maskMap);
+        normalise(mapInfo, maskMap);
+        applyMask(mapInfo, maskMap, workingMap);
+        normalise(mapInfo, workingMap);
+        commit(mapInfo, setMap, workingMap);
 
-    public float[,] workingMap;
-    public int[,] setMap;
-
-    public float[,] maskMap;
-    // Use this for initialization
-    void Start () {
-        mapInfo = gameObject.GetComponent<MapInfo>();
-        workingMap = new float[mapInfo.width, mapInfo.height];
-        maskMap = new float[mapInfo.width, mapInfo.height];
-        setMap = new int[mapInfo.width, mapInfo.height];
-        firstPass();
-        generateMapMask();
-        normalise(maskMap);
-        applyMask();
-        normalise(workingMap);
-        commit();
-
+        return mapInfo;
     }
 
-    public void applyMask() {
+    public static void applyMask(MapInfo mapInfo, float[,] maskMap, float[,] workingMap) {
         for (int x = 0; x < mapInfo.width; x++) {
             for (int y = 0; y < mapInfo.height; y++) {
                 workingMap[x, y] *= maskMap[x, y];
@@ -38,12 +33,11 @@ public class WorldGenerator : MonoBehaviour {
         maskMap = new float[mapInfo.width, mapInfo.height];
     }
 
-    public void commit() {
-        commit("terrain");
-        mapInfo.setMap(setMap);
+    public static void commit(MapInfo mapInfo, int[,] setMap, float[,] workingMap) {
+        commit(mapInfo, setMap, workingMap, "terrain");
     }
 
-    public void commit(string layer) {
+    public static void commit(MapInfo mapInfo, int[,] setMap, float[,] workingMap, string layer) {
         for (int x = 0; x < mapInfo.width; x++) {
             for (int y = 0; y < mapInfo.height; y++) {
                 setMap[x, y] = (int)workingMap[x, y];
@@ -52,7 +46,7 @@ public class WorldGenerator : MonoBehaviour {
         mapInfo.setLayer(layer, setMap);
     }
 
-    private float[,] normalise(float[,] map) {
+    public static float[,] normalise(MapInfo mapInfo, float[,] map) {
         float highest = 0;
         float lowest = 999999999;
         for (int x = 0; x < mapInfo.width; x++) {
@@ -67,14 +61,14 @@ public class WorldGenerator : MonoBehaviour {
 
         for (int x = 0; x < mapInfo.width; x++) {
             for (int y = 0; y < mapInfo.height; y++) {
-                map[x, y] = ((map[x, y] - lowest) / (highest - lowest)) * 4;
+                map[x, y] = ((map[x, y] - lowest) / (highest - lowest)) * 7;
             }
         }
 
         return map;
     }
 
-    private void firstPass() {
+    public static void firstPass(MapInfo mapInfo, float[,] workingMap) {
         for (int x = 0; x < mapInfo.width; x++) {
             for (int y = 0; y < mapInfo.height; y++) {
                 float xCoord = (seed + (float)x / 8f);
@@ -83,7 +77,7 @@ public class WorldGenerator : MonoBehaviour {
             }
         }
     }
-    private void solidColour() {
+    public static void solidColour(MapInfo mapInfo, float[,] workingMap) {
         for (int x = 0; x < mapInfo.width; x++) {
             for (int y = 0; y < mapInfo.height; y++) {
                 float xCoord = (seed + (float)x / 8f);
@@ -93,7 +87,7 @@ public class WorldGenerator : MonoBehaviour {
         }
     }
 
-    private void secondPass() {
+    public static void secondPass(MapInfo mapInfo, float[,] workingMap) {
         for (int x = 0; x < mapInfo.width; x++) {
             for (int y = 0; y < mapInfo.height; y++) {
                 float xCoord = ((1 + seed) * 6.5f  + (float)x / (float)mapInfo.width);
@@ -110,7 +104,7 @@ public class WorldGenerator : MonoBehaviour {
 
 
 
-    public void thing() {
+    public static void thing(MapInfo mapInfo, float[,] maskMap) {
 
         float w, h;
         w = mapInfo.width;
@@ -147,20 +141,20 @@ public class WorldGenerator : MonoBehaviour {
     }
 
 
-    public void generateMapMask() {
-        UnityEngine.Random.seed = (int)seed;
-        for (int i = 0; i < 100; i++) {
+    public static void generateMapMask(MapInfo mapInfo, float[,] maskMap) {
+        //UnityEngine.Random.seed = (int)seed;
+        for (int i = 0; i < 200; i++) {
             int x = (int) (Mathf.PerlinNoise(seed + UnityEngine.Random.value, seed + UnityEngine.Random.value) * mapInfo.width);
             int y = (int) (Mathf.PerlinNoise(seed + UnityEngine.Random.value, seed + UnityEngine.Random.value) * mapInfo.height);
 
             int w = (int)(UnityEngine.Random.value * 40f);
             int h = (int)(UnityEngine.Random.value * 40f);
 
-            addHill(w, h, x, y);
+            addHill(mapInfo, maskMap, w, h, x, y);
         }
     }
 
-    public void addHill(float wC, float hC, int cenX, int cenY) {
+    public static void addHill(MapInfo mapInfo, float[,] maskMap, float wC, float hC, int cenX, int cenY) {
         int minX = (int)(cenX - (wC / 2));
         int minY = (int)(cenY - (hC / 2));
         for (int y = 0; y < hC; y++) {

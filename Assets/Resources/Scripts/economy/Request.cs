@@ -55,11 +55,15 @@ public class Request  {
 
     }
 
-    internal void checkValid() {
+    internal bool checkValid() {
         if (quantity <= 0) {
             //dieeeeeee request.
             active = false;
+            return false;
         }
+        active = true;
+        return true;
+
     }
 
 

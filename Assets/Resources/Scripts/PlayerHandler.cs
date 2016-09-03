@@ -4,65 +4,92 @@ using System;
 
 public class PlayerHandler : MonoBehaviour {
     private MapInfo mapInfo;
-    private VisualTiles visualTiles;
-    private WorldTime worldTime;
+    private WorldTimeController worldTimeController;
 
     // Use this for initialization
     void Start () {
-        mapInfo = GetComponent<MapInfo>();
-        worldTime = GetComponent<WorldTime>();
-        visualTiles = GetComponent<VisualTiles>();
+       // mapInfo = WorldController.Instance.GetCurrentMapInfo();
+        worldTimeController = GetComponent<WorldTimeController>();
+        if (worldTimeController == null) {
+            worldTimeController = GetComponentInParent<WorldTimeController>();
+        }
     }
 
     // Update is called once per frame
 
-    void Update() {
+    //void Update() {
+    //    // mapInfo = WorldController.Instance.GetCurrentMapInfo();
+
+    //    /// MOUSE HANDLER
+    //    if (Input.GetMouseButtonDown(1)) {
+    //        RaycastHit hit;
+    //        if (!Physics.Raycast(FindObjectOfType<Camera>().ScreenPointToRay(Input.mousePosition), out hit))
+    //            return;
+
+    //        Renderer renderer = hit.collider.GetComponent<Renderer>();
+    //        MeshCollider meshCollider = hit.collider as MeshCollider;
+    //        if ( renderer == null || renderer.sharedMaterial == null || renderer.sharedMaterial.mainTexture == null || meshCollider == null)
+    //            return;
+    //        else {
+    //            mapInfo = (! mapInfo.Equals(meshCollider.gameObject.GetComponent<MapInfo>()) ? meshCollider.gameObject.GetComponent<MapInfo>() : mapInfo );
+    //        }
+
+    //        //Texture tex = renderer.material.mainTexture;
+    //        //Vector2 point = mapInfo.findCoord(transform.InverseTransformPoint(hit.point));
+    //        //print(hit.textureCoord + " is - " + point + "On map " + mapInfo.GetName());
+
+    //        //mapInfo.SetTile(point, 1);
+    //        //mapInfo.ChangeTileBy(point, 1);
+    //        mapInfo.DoMeshUpdate();
+
+    //        Vector2 point = mapInfo.findCoord(transform.InverseTransformPoint(hit.point));
+    //        MapType mp = mapInfo.gameObject.GetComponent<MapType>();
+    //        mp.MouseClick(1, point);
+    //    }
+    //    else if (Input.GetMouseButtonDown(0)) {
+    //        RaycastHit hit;
+    //        if (!Physics.Raycast(FindObjectOfType<Camera>().ScreenPointToRay(Input.mousePosition), out hit))
+    //            return;
+    //        else {
+    //            MapInfo otherMapInfo = hit.collider.gameObject.GetComponentInParent<MapInfo>();
+    //            if (otherMapInfo != null) {//&& mapInfo != otherMapInfo) {
+    //                mapInfo = otherMapInfo;
+
+    //                Vector2 point = mapInfo.findCoord(transform.InverseTransformPoint(hit.point));
+    //                MapType mp = mapInfo.gameObject.GetComponent<MapType>();
+    //                mp.MouseClick(0, point);
+    //            }
+    //        }
+    //    }
+    //    else if (Input.GetMouseButtonDown(2)) {
+    //        //mapInfo.GenerateMap();
+    //        Debug.Log("apply mask!");
+
+    //        GetComponentInChildren<WorldGenerator>().applyMask();
+    //        GetComponentInChildren<WorldGenerator>().commit();
+    //        mapInfo.DoMeshUpdate();
+
+    //        //Vector2 point = mapInfo.findCoord(transform.InverseTransformPoint(hit.point));
+    //        MapType mp = mapInfo.gameObject.GetComponent<MapType>();
+    //        mp.MouseClick(2);
+    //    }
 
 
-        /// MOUSE HANDLER
-        if (Input.GetMouseButtonDown(1)) {
-            RaycastHit hit;
-            if (!Physics.Raycast(FindObjectOfType<Camera>().ScreenPointToRay(Input.mousePosition), out hit))
-                return;
+    //    Camera.main.orthographicSize -= Camera.main.orthographicSize * Input.GetAxis("Mouse ScrollWheel");
 
-            Renderer renderer = hit.collider.GetComponent<Renderer>();
-            MeshCollider meshCollider = hit.collider as MeshCollider;
-            if (renderer == null || renderer.sharedMaterial == null || renderer.sharedMaterial.mainTexture == null || meshCollider == null)
-                return;
+    //    Camera.main.orthographicSize = Mathf.Clamp(Camera.main.orthographicSize, 3, 25);
 
-            Texture tex = renderer.material.mainTexture;
-            Vector2 point = visualTiles.findCoord(transform.InverseTransformPoint(hit.point));
-            print(hit.textureCoord + " is - " + point);
-            if (Input.GetMouseButtonDown(1)) {
-                //mapInfo.SetTile(point, 1);
-                //mapInfo.ChangeTileBy(point, 1);
-                visualTiles.UpdateMesh();
-            }
-        }
-        else if (Input.GetMouseButtonDown(0)) {
-            RaycastHit hit;
-            if (!Physics.Raycast(FindObjectOfType<Camera>().ScreenPointToRay(Input.mousePosition), out hit))
-                return;
+    //    /// KEYBOARD HANDLERS
+    //    ///
+    //    if (Input.GetKeyDown(KeyCode.A) ){
+    //        //do  dummyturn
+    //        WorldTimeController.advanceTime(10);
+    //    }
+    //    else if (Input.GetKeyDown(KeyCode.Space)) {
+    //        WorldTimeController.TogglePause();
+    //    }
+    //}
 
-            Vector2 point = visualTiles.findCoord(transform.InverseTransformPoint(hit.point));
-            GetComponent<WorldGenerator>().addHill(30, 30, (int)point.x, (int)point.y);
-        }
-        else if (Input.GetMouseButtonDown(2)) {
-            //mapInfo.GenerateMap();
-            Debug.Log("apply mask!");
-
-            GetComponentInChildren<WorldGenerator>().applyMask();
-            GetComponentInChildren<WorldGenerator>().commit();
-            visualTiles.UpdateMesh();
-        }
-        /// KEYBOARD HANDLERS
-        /// 
-        if (Input.GetKeyDown(KeyCode.A) ){
-            //do  dummyturn
-            worldTime.advanceTime(10);
-        }
-    }
-
-    private void handleKey() {
-    }
+    //private void handleKey() {
+    //}
 }

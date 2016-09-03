@@ -8,7 +8,9 @@ public class Economy : MonoBehaviour {
     private int points;
     private List<Auction> auctions;
     private Dictionary<Resource, Auction> auctionByType;
-    private int updateSpeed = 5;
+    private int updateSpeed = 5; //this is how many time units the economy needs to pass before doing something.
+
+    private List<Business> businessList = null;
     private Dictionary<String, Resource> resources;
 
     public Trader traderOne;
@@ -17,6 +19,7 @@ public class Economy : MonoBehaviour {
     void Start () {
         points = 0;
 
+ 
         resources = new Dictionary<string, Resource>();
         parseResources();
 
@@ -41,6 +44,7 @@ public class Economy : MonoBehaviour {
                 }
             }
         }
+        createBusinesses();
 	}
 
     private void parseResources() {
@@ -60,10 +64,10 @@ public class Economy : MonoBehaviour {
             if (xmlNode.Attributes.Count > 0) {
                 
             }
-            Debug.Log(xmlNode.Name + "=======================");
+            //Debug.Log(xmlNode.Name + "=======================");
             foreach (XmlNode n in xmlNode.ChildNodes) {
-                Debug.Log(n.Name);
-                Debug.Log(n.Attributes.ToString());
+                //Debug.Log(n.Name);
+                //Debug.Log(n.Attributes.ToString());
                 switch (n.Name) {
                     case "location":
                         res.location = n.InnerText;
@@ -86,14 +90,14 @@ public class Economy : MonoBehaviour {
                         break;
                 }
             }
-            Debug.Log(res.ToString());
+            //Debug.Log(res.ToString());
             resources.Add(res.name, res);
             
             Debug.Log("=============================");
         }
         
     }
-     
+
     public void gainActionPoints(int points) {
         Debug.Log("Economy gained points");
         this.points += points;
@@ -106,7 +110,14 @@ public class Economy : MonoBehaviour {
         }
     }
 
-
+    private void createBusinesses()
+    {
+        //Create Businesses
+        businessList = new List<Business>();
+        businessList.Add(new Business("Emily's Ripe Peaches", resources["raw"]));
+        //businessList.Add(new Business("Emily's Sour Plums", resources["luxury"]));
+        //businessList.Add(new Business("Emily's Spicy Nachos", resources["processed"]));
+    }
     ////temp I think.
     //public enum Resource
     //{

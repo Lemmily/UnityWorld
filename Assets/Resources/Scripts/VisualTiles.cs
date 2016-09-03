@@ -2,48 +2,45 @@
 using System.Collections;
 using System;
 
+[RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
 public class VisualTiles : MonoBehaviour {
-    private int mapSizeX;
-    private int mapSizeY;
-    public int resolutionX;
-    public int resolutionY;
-    private MeshFilter meshFilter;
+    public MeshFilter meshFilter;
     private Vector2[] UVArray;
-    private Mesh mesh;
-    private MapInfo mapInfo;
+    public Mesh terrainMesh;
+    public MapInfo mapInfo;
     private float tileSizeX;
     private float tileSizeY;
-
-    //For this, your GameObject this script is attached to would have a
-    //Transform Component, a Mesh Filter Component, and a Mesh Renderer
-    //component. You will also need to assign your texture atlas / material
-    //to it. 
+    private string layer;
 
     void Start() {
         meshFilter = GetComponent<MeshFilter>();
-        mapInfo = gameObject.GetComponent<MapInfo>();
-        BuildMesh();
     }
 
+
     void Update() {
-        if (mapInfo.updating) {
+        if (mapInfo.finished && mapInfo.updating) {
             UpdateMesh();
             mapInfo.updating = false;
         }
     }
 
+    internal void Setup(MapInfo mapInfo, string layer) {
+        this.mapInfo = mapInfo;
+        this.layer = layer;
+        tileSizeX = mapInfo.tileSizeX;
+        tileSizeY = mapInfo.tileSizeY;
 
-    public Vector2 findCoord(Vector3 point) {
-        return new Vector2((int)(point.x / tileSizeX), (int)(point.y / tileSizeY));
+
+        if (meshFilter == null) {
+            meshFilter = GetComponent<MeshFilter>();
+            if (meshFilter == null) {
+                meshFilter = gameObject.AddComponent<MeshFilter>();
+            }
+        }
     }
 
-    public void BuildMesh() {
-        mapSizeX = mapInfo.width;
-        mapSizeY = mapInfo.height;
-
-        tileSizeX = (float)resolutionX / mapSizeX;
-        tileSizeY = (float)resolutionY / mapSizeY;
-        int numTiles = mapSizeX * mapSizeY;
+    private void BuildMesh(Mesh mesh) {
+        int numTiles = mapInfo.width * mapInfo.height;
         int numTriangles = numTiles * 6;
         int numVerts = numTiles * 4;
 
@@ -51,8 +48,8 @@ public class VisualTiles : MonoBehaviour {
         UVArray = new Vector2[numVerts];
 
         int x, y, iVertCount = 0;
-        for (x = 0; x < mapSizeX; x++) {
-            for (y = 0; y < mapSizeY; y++) {
+        for (x = 0; x < mapInfo.width; x++) {
+            for (y = 0; y < mapInfo.height; y++) {
                 vertices[iVertCount + 0] = new Vector3(x * tileSizeX, y * tileSizeY, 0);
                 vertices[iVertCount + 1] = new Vector3(x * tileSizeX, y * tileSizeY + tileSizeY, 0);
                 vertices[iVertCount + 2] = new Vector3(x * tileSizeX + tileSizeX, y * tileSizeY + tileSizeY, 0);
@@ -81,14 +78,22 @@ public class VisualTiles : MonoBehaviour {
         mesh.triangles = triangles;
         mesh.RecalculateBounds();
         meshFilter.mesh = mesh;
+        terrainMesh = mesh;
+    }
+
+    public void BuildMesh() {
+        BuildMesh(terrainMesh);
         MeshCollider meshC = gameObject.AddComponent<MeshCollider>();
         //meshC.sharedMesh = null;
         //meshC.sharedMesh = mesh;
         //UpdateMesh(); //I put this in a separate method for my own purposes.
     }
 
-    //Note, the example UV entries I have are assuming a tile atlas 
-    //with 16 total tiles in a 4x4 grid.
+    public string GetName() {
+        return mapInfo.mapName;
+    }
+
+    //Note, assuming a tile atlas with 16 total tiles in a 4x4 grid.
 
     public void UpdateMesh() {
         //if (mapInfo.updating) {
@@ -98,9 +103,9 @@ public class VisualTiles : MonoBehaviour {
         //tileNum =
 
 
-        for (int x = 0; x < mapSizeX; x++) {
-            for (int y = 0; y < mapSizeY; y++) {
-                int tileType = mapInfo.getTile(x, y);
+        for (int x = 0; x < mapInfo.width; x++) {
+            for (int y = 0; y < mapInfo.height; y++) {
+                int tileType = mapInfo.getTile(x, y, layer);
                 Vector2[] UVLocs = GetUVForTile(tileType);
                 UVArray[iVertCount + 0] = UVLocs[0]; //Top left of tile in atlas
                 UVArray[iVertCount + 1] = UVLocs[1]; //Top right of tile in atlas
@@ -112,7 +117,7 @@ public class VisualTiles : MonoBehaviour {
 
         meshFilter.mesh.uv = UVArray;
     }
-    
+
     private Vector2[] GetUVForTile(int tileType) {
         Vector2[] tempUV = new Vector2[4];
         float tileH = 1f / 4;

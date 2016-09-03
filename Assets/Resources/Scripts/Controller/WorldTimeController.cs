@@ -1,6 +1,7 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
-public class WorldTime : MonoBehaviour
+public class WorldTimeController : MonoBehaviour
 {
     int turnsFromBeginning = 0;
     float timePassed= 0;
@@ -18,7 +19,7 @@ public class WorldTime : MonoBehaviour
                 timePassed = 0;
                 advanceTime(1);
             }
-            
+
         }
     }
 
@@ -26,8 +27,14 @@ public class WorldTime : MonoBehaviour
 
 
 
-    // "time" here is an abstract measure. maybe "turn" is a better word. 
-    public void advanceTime(int time) {
-        BroadcastMessage("gainActionPoints", time);
+    // "time" here is an abstract measure. maybe "points" is a better word.
+    public void advanceTime(int points) {
+        BroadcastMessage("gainActionPoints", points);
+        turnsFromBeginning += points;
+    }
+
+    internal void TogglePause() {
+        waitForPlayer = !waitForPlayer;
+        Debug.Log("Toggled Pause to " + waitForPlayer.ToString() + "!");
     }
 }

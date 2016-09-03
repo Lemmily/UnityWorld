@@ -37,6 +37,10 @@ public class Resource {
     //}
     
     override public string ToString() {
-        return name + ": " + output + " in " + time + " using: " + needs;
+        string s = name + ": " + output + " in " + time + " using: ";
+        foreach(KeyValuePair<string, int> pair in needs) {
+            s += " (" + pair.Key + ":" + pair.Value + "),";
+        }
+        return s;
     }
 }

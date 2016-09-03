@@ -47,10 +47,17 @@ public class Auction {
             } else {
                 requestsByType["sell"].Remove(dead[i]);
             }
+
         }
+        
     }
 
     public void addRequest(Request request) {
+        if (! request.checkValid()) {
+            Debug.LogError("Auction.AddRequest, tried to add an invalid request to auction. " + request.owner + " " + request.quantity + "," + request.resource);
+            return;
+        }
+        requests.Add(request);
         if (request.isBuy()) {
             requestsByType["buy"].Add(request);
         } else {
