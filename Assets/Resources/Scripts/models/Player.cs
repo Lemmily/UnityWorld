@@ -29,8 +29,10 @@ public class Player {
 
     public void Move(int dx, int dy) {
         //no checks - they are done PRIOR to this!
+        Debug.Log("Player moved from location: " + x + "," + y);
         x += dx;
         y += dy;
+        Debug.Log("Player moved to location: " + x + "," + y);
         if(cbPlayerMoved != null)
             cbPlayerMoved(this);
     }

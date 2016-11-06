@@ -63,11 +63,8 @@ public class Tile : IXmlSerializable
 
     public bool IsEnterable() {
         switch (tileType) {
-            case 0:
-                return true;
-
             default:
-                return false;
+                return true; //everything is enterable unless a specific case.
         }
     }
 }

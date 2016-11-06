@@ -113,9 +113,9 @@ public class TileSpriteController : MonoBehaviour {
         }
 
         foreach (GameObject go in old_active_go) {
-        go.SetActive(false);
-        go.name = "unused_tile";
-        deactivatedObjects.Push(go);
+            go.SetActive(false);
+            go.name = "unused_tile";
+            deactivatedObjects.Push(go);
         }
     }
 
@@ -167,7 +167,7 @@ public class TileSpriteController : MonoBehaviour {
                     UVArray[iVertCount + 3] = UVLocs[3];
                     iVertCount += 4;
                 } catch (IndexOutOfRangeException ex) {
-                    Debug.LogError("out of bounds -" + iVertCount);
+                    Debug.LogError("out of bounds -" + iVertCount + "\n" + ex.Message);
                 }
             }
         }
