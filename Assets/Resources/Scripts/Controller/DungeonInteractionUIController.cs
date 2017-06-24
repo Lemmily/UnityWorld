@@ -2,12 +2,10 @@
 using UnityEngine.UI;
 using System.Collections.Generic;
 
-public class DungeonInteractionUIController : MonoBehaviour {
+public class DungeonInteractionUIController : PlaceInteractionController
+{
 
     public static DungeonInteractionUIController Instance;
-    
-    public Text description;
-    public GameObject ui;
     public GameObject challenge;
     public GameObject getItems;
     public GameObject exit;
@@ -64,7 +62,7 @@ public class DungeonInteractionUIController : MonoBehaviour {
     public void GetItems() {
         Debug.Log("Gathered up all the items!");
         getItems.SetActive(false);
-        challenge.SetActive(true);
+        //challenge.SetActive(true);
     }
 
     public void ExitDungeon() {
