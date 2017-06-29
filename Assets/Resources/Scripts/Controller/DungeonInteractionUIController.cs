@@ -2,10 +2,10 @@
 using UnityEngine.UI;
 using System.Collections.Generic;
 
-public class DungeonInteractionUIController : MonoBehaviour {
+public class DungeonInteractionUIController : PlaceInteractionController {
 
     public static DungeonInteractionUIController Instance;
-    
+
     public Text description;
     public GameObject ui;
     public GameObject challenge;
@@ -23,7 +23,7 @@ public class DungeonInteractionUIController : MonoBehaviour {
         set
         {
             dungeon = value;
-            
+
             if (value == null)
                 return;
 
@@ -39,21 +39,21 @@ public class DungeonInteractionUIController : MonoBehaviour {
         }
     }
 
-    
+
 	void Start () {
         Instance = this;
         description = ui.GetComponentInChildren<Text>();
 	}
-	
+
 	void Update () {
 	    if (dungeon == null && ui.activeSelf == true) {
             ui.SetActive(false);
         } else if (dungeon != null && ui.activeSelf == false) {
             ui.SetActive(true);
-        } 
+        }
     }
-    
-    
+
+
     public void ChallengeDungeon() {
         Debug.Log("Challenged the dungeon!");
 
