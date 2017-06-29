@@ -6,6 +6,7 @@ using System;
 public class TileSpriteController : MonoBehaviour {
 
 
+    public static TileSpriteController Instance;
     private Dictionary<Tile, GameObject> tileGameObjectMap;
 
 
@@ -34,6 +35,7 @@ public class TileSpriteController : MonoBehaviour {
 	    if( ! ResourceLoader.instance.doneLoading) {
             Debug.LogError("resource loader did not finish? .");
         }
+        Instance = this;
 
         tile_container = new GameObject();
         tile_container.transform.SetParent(this.transform);
@@ -45,13 +47,14 @@ public class TileSpriteController : MonoBehaviour {
         World.RegisterTileChanged(OnTileChanged);
 
         PlayerController.Instance.player.RegisterPlayerMovedCallback(OnPlayerMoved);
-
+        MouseController.Instance.RegisterMouseScrolledCallback(RedrawScreen);
         OnPlayerMoved(PlayerController.Instance.player);
 	}
 
 
     void OnTileChanged(Tile tile_data) {
         //do stuff;
+        Debug.Log("Tile changed: TileSpriteController noticed!");
     }
 
     void OnPlayerMoved(Player player) {
@@ -65,6 +68,15 @@ public class TileSpriteController : MonoBehaviour {
           DrawWithPooling();
         } else {
           DrawWithMeshes();
+        }
+    }
+
+    void RedrawScreen() {
+        if (pooling) {
+            DrawWithPooling();
+        }
+        else {
+            DrawWithMeshes();
         }
     }
 

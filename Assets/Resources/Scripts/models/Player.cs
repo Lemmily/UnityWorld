@@ -15,8 +15,21 @@ public class Player {
         set;
     }
 
-    private Action<Player> cbPlayerMoved;
+    private int skill = 2; //TODO: un-hardcode this.
+    public int Skill
+    {
+        get
+        {
+            return skill;
+        }
 
+        set
+        {
+            skill = value;
+        }
+    }
+
+    private Action<Player> cbPlayerMoved;
     public Player() {
         x = 0;
         y = 0;
@@ -44,4 +57,6 @@ public class Player {
     public void UnRegisterPlayerMovedCallback(Action<Player> callback) {
         cbPlayerMoved -= callback;
     }
+
+
 }

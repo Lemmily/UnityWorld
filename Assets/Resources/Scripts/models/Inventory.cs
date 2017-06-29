@@ -12,8 +12,7 @@ public class Inventory {
         items += 1;
     }
         
-
-
+    
     public bool isEmpty() {
         return true;
     }
