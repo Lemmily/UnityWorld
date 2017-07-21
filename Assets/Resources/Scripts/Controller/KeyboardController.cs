@@ -19,7 +19,7 @@ public class KeyboardController : MonoBehaviour {
     {
         get
         {
-            return WorldController.Instance.world;
+            return WorldController.Instance.World;
         }
     }
     Player player

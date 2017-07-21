@@ -17,7 +17,7 @@ public class PlayerController : MonoBehaviour {
     {
         get
         {
-            return WorldController.Instance.world;
+            return WorldController.Instance.World;
         }
     }
 
@@ -88,7 +88,8 @@ public class PlayerController : MonoBehaviour {
             case Direction.Down:
                 Dungeon dun = world.CheckForDungeon(player.x, player.y);
                 if (dun != null) {
-                    DungeonInteractionUIController.Instance.Dungeon = dun;
+                    //DungeonInteractionUIController.Instance.Dungeon = dun;
+                    PlaceInteractionController.Instance.Place = dun;
                     lockActions = true;
                     return true;
                 }

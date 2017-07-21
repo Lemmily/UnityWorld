@@ -4,20 +4,28 @@ using System;
 
 public class City : IPlace  {
 
-    public int x { get; protected set; }
-    public int y { get; protected set; }
+    public int X { get; protected set; }
+    public int Y { get; protected set; }
 
-    public string description { get; protected set; }
-    public string name { get; protected set; }
+    public string Description { get; protected set; }
+    public string Name { get; protected set; }
+
+    public World.PlaceType Type
+    {
+        get
+        {
+            return World.PlaceType.City;
+        }
+    }
 
     //temp stuff to prove concept//
     int money = 999999;
     Inventory inventory;
     public City(int x, int y, string desc) {
-        this.x = x;
-        this.y = y;
-        this.description = desc;
-        this.name = "City";
+        this.X = x;
+        this.Y = y;
+        this.Description = desc;
+        this.Name = "City";
         this.inventory = new Inventory();
     }
 
@@ -35,7 +43,7 @@ public class City : IPlace  {
             pInventory.items = 0;
         }
 
-        Debug.Log(name + " spent " + cost + " on items!");
+        Debug.Log(Name + " spent " + cost + " on items!");
         return cost;
     }
 
@@ -53,13 +61,13 @@ public class City : IPlace  {
     }
 
     public string GetDescriptorText() {
-        if (description != null) {
-            return description;
+        if (Description != null) {
+            return Description;
         }
         return "DUNGEON \n This is a Dungeon. Make yourself at home.";
     }
 
     public string GetName() {
-        return name;
+        return Name;
     }
 }

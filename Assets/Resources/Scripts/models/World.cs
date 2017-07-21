@@ -11,6 +11,7 @@ public class World : IXmlSerializable {
     public int Height;
 
 
+    public enum PlaceType { City, Dungeon, Farm };
 
     Tile[,] map;
     private Action<Tile> cbTileChanged;
@@ -85,7 +86,7 @@ public class World : IXmlSerializable {
     }
     public Dungeon CheckForDungeon(int x, int y) {
         foreach (Dungeon dungeon in dungeons) {
-            if (dungeon.x == x && dungeon.y == y) {
+            if (dungeon.X == x && dungeon.Y == y) {
                 Debug.Log("I checked and there's a dungeon here!\n" + dungeon);
                 return dungeon;
             }

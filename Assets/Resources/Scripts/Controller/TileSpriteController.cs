@@ -26,7 +26,7 @@ public class TileSpriteController : MonoBehaviour {
     {
         get
         {
-            return WorldController.Instance.world;
+            return WorldController.Instance.World;
         }
     }
 
@@ -101,7 +101,7 @@ public class TileSpriteController : MonoBehaviour {
 
         for (int x = (int)start.x - 1; x < end.x + 2 ; x++) {
             for (int y = (int)start.y - 1; y < end.y + 2; y++) {
-                Tile tile_data = WorldController.Instance.world.GetTileAt(x, y);
+                Tile tile_data = WorldController.Instance.World.GetTileAt(x, y);
                 if (tile_data == null)
                     continue;
 

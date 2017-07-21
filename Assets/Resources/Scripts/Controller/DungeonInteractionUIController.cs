@@ -37,11 +37,11 @@ public class DungeonInteractionUIController : PlaceInteractionController
         }
     }
 
-    
-	void Start () {
+    void Start()
+    {
         Instance = this;
         description = ui.GetComponentInChildren<Text>();
-	}
+    }
 	
 	void Update () {
 	    if (dungeon == null && ui.activeSelf == true) {

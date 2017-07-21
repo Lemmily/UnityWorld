@@ -13,7 +13,7 @@ public class CityController : MonoBehaviour {
     {
         get
         {
-            return WorldController.Instance.world;
+            return WorldController.Instance.World;
         }
     }
     
