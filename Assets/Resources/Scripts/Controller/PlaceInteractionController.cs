@@ -13,7 +13,7 @@ public class PlaceInteractionController : MonoBehaviour
 
     public static PlaceInteractionController Instance;
     
-    public Text description;
+    public string description;
     public Font font;
     public GameObject ui;
 
@@ -33,21 +33,26 @@ public class PlaceInteractionController : MonoBehaviour
         {
             place = value;
 
-            if (value == null)
+            if (place == null) {
+                HideUI();
                 return;
+            }
 
-            description.text = place.GetDescriptorText();
+            description = place.GetDescriptorText();
 
             if (place.Type == World.PlaceType.City) {
                 City city = (City)place;
                 LoadCityInteractions(city);
+                Debug.Log("PlaceInteractionController:- Set the place to a city: " + city);
             } else if (place.Type == World.PlaceType.Dungeon) {
                 Dungeon dungeon = (Dungeon)place;
                 LoadDungeonInteractions(dungeon);
+                Debug.Log("PlaceInteractionController:- Set the place to a dungeon: " + dungeon);
 
             } else if (place.Type == World.PlaceType.Farm) {
                 Farm farm = (Farm)Place;
                 LoadFarmInteractions(farm);
+                Debug.Log("PlaceInteractionController:- Set the place to a farm: " + farm);
             } else {
                 Debug.LogError("Somehow got a place type that don't exist.");
             }
@@ -56,15 +61,27 @@ public class PlaceInteractionController : MonoBehaviour
         }
     }
 
+    private void HideUI()
+    {
+        Debug.Log("Hiding the UI");
+        if (ui != null)
+            ui.SetActive(false);
+    }
+
     public Dictionary<World.PlaceType, List<Button>> buttons;
     public List<Button> activeButtons;
 
     public void Start()
     {
         Instance = this;
-        description = ui.GetComponentInChildren<Text>();
         buttons = new Dictionary<World.PlaceType, List<Button>>();
         activeButtons = new List<Button>();
+    }
+
+
+    public void Update()
+    {
+        //is this an appropriate place to keep checking stuff?
     }
 
 
@@ -84,14 +101,22 @@ public class PlaceInteractionController : MonoBehaviour
         // maybe like the furniture functions in 2d_simple_game
 
         if (buttons.ContainsKey(World.PlaceType.Dungeon)) {
+            //I think I'm going to recreate the buttons everytime atm.
+
+
 
         }
         else {
             Canvas canvas = GameObject.FindObjectOfType<Canvas>();
-            
 
             ui = GameObject.Instantiate(pf_panel);
             ui.gameObject.transform.SetParent(canvas.transform);
+            RectTransform rTransform = ui.GetComponent<RectTransform>();
+            //rTransform.SetPositionAndRotation(Vector3.zero, Quaternion.Euler(0,0,0));
+            rTransform.localPosition = new Vector3(rTransform.localPosition.x, 0, 0);
+
+            //Text text = ui.AddComponent<Text>();
+            //text.text = description;
             GameObject btn_go = GameObject.Instantiate(pf_button);
 
             btn_go.transform.SetParent(ui.transform);
@@ -100,30 +125,38 @@ public class PlaceInteractionController : MonoBehaviour
             Text text = btn_challenge.GetComponentInChildren<Text>();
             text.text = "Challenge Dungeon";
             text.font = font;
-            btn_challenge.onClick.AddListener(() => dungeon.challengeDungeon(WorldController.Instance.Player));
+            btn_challenge.onClick.AddListener(() => dungeon.ChallengeDungeon(WorldController.Instance.Player));
+
+            btn_go = GameObject.Instantiate(pf_button);
+            btn_go.transform.SetParent(ui.transform);
+            Button btn_get_items = btn_go.GetComponentInChildren<Button>();
+            text = btn_get_items.GetComponentInChildren<Text>();
+            text.text = "Get Items";
+            text.font = font;
+            btn_get_items.onClick.AddListener(() => dungeon.GetItems(WorldController.Instance.Player, null));
+
+            btn_go = GameObject.Instantiate(pf_button);
+            btn_go.transform.SetParent(ui.transform);
+            Button btn_exit = btn_go.GetComponentInChildren<Button>();
+            text = btn_exit.GetComponentInChildren<Text>();
+            text.text = "Exit Dungeon";
+            text.font = font;
+            btn_exit.onClick.AddListener(() =>
+            {
+                Debug.Log("Exited the dungeon");
+                PlayerController.Instance.lockActions = false;
+                place = null;
+            });
 
             //go.transform.SetParent(ui.transform);
             //Button btn_challenge = go.AddComponent<Button>();
             //Text text = btn_challenge.gameObject.AddComponent<Text>();
             //text.text = "Challenge Dungeon";
             //text.font = font;
-            //btn_challenge.onClick.AddListener(() => dungeon.challengeDungeon(WorldController.Instance.Player));
-            //go.SetActive(true);
-            //go.transform.localPosition = new Vector3(30, 30);
-            //activeButtons.Add(btn_challenge);
-
-            //GameObject getItemsGo = new GameObject();
-            //getItemsGo.transform.SetParent(ui.transform);
-            //Button btn_items = getItemsGo.AddComponent<Button>();
-            //text = btn_items.gameObject.AddComponent<Text>();
-            //text.text = "get items";
-            //text.font = font;
-            //btn_challenge.onClick.AddListener(() => dungeon.GetItems(WorldController.Instance.Player, null));
-            //activeButtons.Add(btn_items);
 
 
 
-            buttons.Add(World.PlaceType.Dungeon, new List<Button> { btn_challenge, });
+            buttons.Add(World.PlaceType.Dungeon, new List<Button> { btn_challenge, btn_get_items, btn_exit});
         }
         if (dungeon.beaten) {
         //    getItems.SetActive(true);

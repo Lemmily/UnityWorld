@@ -44,7 +44,7 @@ public class Dungeon : IPlace
     }
 
 
-    public bool challengeDungeon(Agent agent) {
+    public bool ChallengeDungeon(Agent agent) {
 
         Debug.Log("Dungeon:- " + agent.name + " challenged the dungeon!");
         //success

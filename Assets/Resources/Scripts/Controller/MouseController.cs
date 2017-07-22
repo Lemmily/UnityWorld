@@ -49,6 +49,7 @@ public class MouseController : MonoBehaviour
         if (Input.GetMouseButton(1) || Input.GetMouseButton(2)) { //right or middle mouse.
             Vector3 diff = lastFramePosition - currFramePosition;
             Camera.main.transform.Translate(diff);
+            cbMouseScrolled();
         }
 
         Camera.main.orthographicSize -= Camera.main.orthographicSize * Input.GetAxis("Mouse ScrollWheel");

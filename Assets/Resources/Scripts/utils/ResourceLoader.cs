@@ -90,6 +90,16 @@ public class ResourceLoader : MonoBehaviour
         return instance.characterSpriteMap["tiles_0"];
     }
 
+    internal static Sprite GetDungeonSprite()
+    {
+        return instance.characterSpriteMap["tiles_3"];
+    }
+
+    internal static Sprite GetCitySprite()
+    {
+        return instance.characterSpriteMap["tiles_2"];
+    }
+
 
     public static Sprite GetTileSprite(string name) {
         name = name.ToLower();
