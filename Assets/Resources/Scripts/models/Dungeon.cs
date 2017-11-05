@@ -38,8 +38,7 @@ public class Dungeon : IPlace
     }
 
     public List<Item> GetItems(Agent agent, Inventory inventory) {
-
-
+        inventory.items += 1;
         return null;
     }
 
@@ -47,7 +46,7 @@ public class Dungeon : IPlace
     public bool ChallengeDungeon(Agent agent) {
 
         Debug.Log("Dungeon:- " + agent.name + " challenged the dungeon!");
-        //success
+        // insta-success
         beaten = true;
         return true;
     }

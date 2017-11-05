@@ -64,8 +64,15 @@ public class World : IXmlSerializable {
     internal bool CheckForPlace(Tile t) {
         return allPlaces.ContainsKey(t);
     }
+    internal IPlace CheckForPlace(int x, int y)
+    {
+        if (CheckForPlace(GetTileAt(x, y))) {
+            return GetPlace(GetTileAt(x, y));
+        }
+        return null;
+    }
 
-   
+
     public List<Dungeon> GetDungeons() {
         return dungeons;
     }
@@ -97,6 +104,7 @@ public class World : IXmlSerializable {
     public void RegisterTileChanged(Action<Tile> callbackfunc) {
         cbTileChanged += callbackfunc;
     }
+
 
     public void UnregisterTileChanged(Action<Tile> callbackfunc) {
         cbTileChanged -= callbackfunc;

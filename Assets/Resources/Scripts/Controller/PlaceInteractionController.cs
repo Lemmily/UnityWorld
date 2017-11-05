@@ -35,6 +35,7 @@ public class PlaceInteractionController : MonoBehaviour
 
             if (place == null) {
                 HideUI();
+                Debug.Log("PlaceInteractionController:- Setting place to null, adn trying to act on it!");
                 return;
             }
 
@@ -61,12 +62,6 @@ public class PlaceInteractionController : MonoBehaviour
         }
     }
 
-    private void HideUI()
-    {
-        Debug.Log("Hiding the UI");
-        if (ui != null)
-            ui.SetActive(false);
-    }
 
     public Dictionary<World.PlaceType, List<Button>> buttons;
     public List<Button> activeButtons;
@@ -87,7 +82,11 @@ public class PlaceInteractionController : MonoBehaviour
 
     private void LoadCityInteractions(City city)
     {
-        throw new NotImplementedException();
+        if (ui != null) {
+            HideUI();
+        }
+        CreateCityPanel(city);
+        Debug.Log("Creating City Panel");
     }
 
     private void LoadFarmInteractions(Farm farm)
@@ -99,72 +98,158 @@ public class PlaceInteractionController : MonoBehaviour
     {
         // store these "getItems" and "challenge" as buttons somewhere, 
         // maybe like the furniture functions in 2d_simple_game
-
-        if (buttons.ContainsKey(World.PlaceType.Dungeon)) {
-            //I think I'm going to recreate the buttons everytime atm.
-
-
-
+        if (ui != null) {
+            HideUI();
         }
-        else {
-            Canvas canvas = GameObject.FindObjectOfType<Canvas>();
-
-            ui = GameObject.Instantiate(pf_panel);
-            ui.gameObject.transform.SetParent(canvas.transform);
-            RectTransform rTransform = ui.GetComponent<RectTransform>();
-            //rTransform.SetPositionAndRotation(Vector3.zero, Quaternion.Euler(0,0,0));
-            rTransform.localPosition = new Vector3(rTransform.localPosition.x, 0, 0);
-
-            //Text text = ui.AddComponent<Text>();
-            //text.text = description;
-            GameObject btn_go = GameObject.Instantiate(pf_button);
-
-            btn_go.transform.SetParent(ui.transform);
-
-            Button btn_challenge = btn_go.GetComponentInChildren<Button>();
-            Text text = btn_challenge.GetComponentInChildren<Text>();
-            text.text = "Challenge Dungeon";
-            text.font = font;
-            btn_challenge.onClick.AddListener(() => dungeon.ChallengeDungeon(WorldController.Instance.Player));
-
-            btn_go = GameObject.Instantiate(pf_button);
-            btn_go.transform.SetParent(ui.transform);
-            Button btn_get_items = btn_go.GetComponentInChildren<Button>();
-            text = btn_get_items.GetComponentInChildren<Text>();
-            text.text = "Get Items";
-            text.font = font;
-            btn_get_items.onClick.AddListener(() => dungeon.GetItems(WorldController.Instance.Player, null));
-
-            btn_go = GameObject.Instantiate(pf_button);
-            btn_go.transform.SetParent(ui.transform);
-            Button btn_exit = btn_go.GetComponentInChildren<Button>();
-            text = btn_exit.GetComponentInChildren<Text>();
-            text.text = "Exit Dungeon";
-            text.font = font;
-            btn_exit.onClick.AddListener(() =>
-            {
-                Debug.Log("Exited the dungeon");
-                PlayerController.Instance.lockActions = false;
-                place = null;
-            });
-
-            //go.transform.SetParent(ui.transform);
-            //Button btn_challenge = go.AddComponent<Button>();
-            //Text text = btn_challenge.gameObject.AddComponent<Text>();
-            //text.text = "Challenge Dungeon";
-            //text.font = font;
+        
+        CreateDungeonPanel(dungeon);
 
 
-
-            buttons.Add(World.PlaceType.Dungeon, new List<Button> { btn_challenge, btn_get_items, btn_exit});
-        }
         if (dungeon.beaten) {
-        //    getItems.SetActive(true);
-        //    challenge.SetActive(false);
-        //} else {
-        //    getItems.SetActive(false);
-        //    challenge.SetActive(true);
+            //Get each of the buttons.
+
+            foreach (Button btn in ui.GetComponentsInChildren<Button>()) {
+                switch (btn.gameObject.name) {
+                    case "Challenge Dungeon":
+                        btn.gameObject.SetActive(false);
+                        break;
+                    case "Get Items":
+                        btn.gameObject.SetActive(true);
+                        break;
+                    case "Exit Dungeon":
+                        btn.gameObject.SetActive(true);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        } else {
+            foreach (Button btn in ui.GetComponentsInChildren<Button>()) {
+                switch (btn.gameObject.name) {
+                    case "Challenge Dungeon":
+                        btn.gameObject.SetActive(true);
+                        break;
+                    case "Get Items":
+                        btn.gameObject.SetActive(false);
+                        break;
+                    case "Exit Dungeon":
+                        btn.gameObject.SetActive(true);
+                        break;
+                    default:
+                        break;
+                }
+            }
+
         }
     }
     
+
+    private void CreateDungeonPanel(Dungeon dungeon)
+    {
+        Canvas canvas = GameObject.FindObjectOfType<Canvas>();
+
+        ui = GameObject.Instantiate(pf_panel);
+        ui.gameObject.transform.SetParent(canvas.transform);
+        RectTransform rTransform = ui.GetComponent<RectTransform>();
+        //rTransform.SetPositionAndRotation(Vector3.zero, Quaternion.Euler(0,0,0));
+        rTransform.localPosition = new Vector3(rTransform.localPosition.x, 0, 0);
+
+        //Text text = ui.AddComponent<Text>();
+        //text.text = description;
+        GameObject btn_go = GameObject.Instantiate(pf_button);
+        btn_go.name = "Challenge Dungeon";
+        btn_go.transform.SetParent(ui.transform);
+
+        Button btn_challenge = btn_go.GetComponentInChildren<Button>();
+        Text text = btn_challenge.GetComponentInChildren<Text>();
+        text.text = "Challenge Dungeon";
+        text.font = font;
+        btn_challenge.onClick.AddListener(() => {
+            dungeon.ChallengeDungeon(WorldController.Instance.Player);
+            LoadDungeonInteractions(dungeon);
+            });
+
+        btn_go = GameObject.Instantiate(pf_button);
+        btn_go.transform.SetParent(ui.transform);
+        btn_go.name = "Get Items";
+        Button btn_get_items = btn_go.GetComponentInChildren<Button>();
+        text = btn_get_items.GetComponentInChildren<Text>();
+        text.text = "Get Items";
+        text.font = font;
+        btn_get_items.onClick.AddListener(() => dungeon.GetItems(PlayerController.Instance.player, PlayerController.Instance.inventory));
+
+        btn_go = GameObject.Instantiate(pf_button);
+        btn_go.transform.SetParent(ui.transform);
+        btn_go.name = "Exit Dungeon";
+        Button btn_exit = btn_go.GetComponentInChildren<Button>();
+        text = btn_exit.GetComponentInChildren<Text>();
+        text.text = "Exit Dungeon";
+        text.font = font;
+        btn_exit.onClick.AddListener(() =>
+        {
+            Debug.Log("Exited the dungeon:- Hiiiii");
+            PlayerController.Instance.lockActions = false;
+            place = null;
+            HideUI();
+        });
+    }
+
+
+    private void CreateCityPanel(City city)
+    {
+        Canvas canvas = GameObject.FindObjectOfType<Canvas>();
+
+        ui = GameObject.Instantiate(pf_panel);
+        ui.gameObject.transform.SetParent(canvas.transform);
+        RectTransform rTransform = ui.GetComponent<RectTransform>();
+        //rTransform.SetPositionAndRotation(Vector3.zero, Quaternion.Euler(0,0,0));
+        rTransform.localPosition = new Vector3(rTransform.localPosition.x, 0, 0);
+
+        //Text text = ui.AddComponent<Text>();
+        //text.text = description;
+        GameObject btn_go = GameObject.Instantiate(pf_button);
+        btn_go.name = "Sell All Items";
+        btn_go.transform.SetParent(ui.transform);
+
+        Button btn_sell_items = btn_go.GetComponentInChildren<Button>();
+        Text text = btn_sell_items.GetComponentInChildren<Text>();
+        text.text = "Sell All Items";
+        text.font = font;
+        btn_sell_items.onClick.AddListener(() => {
+            int monies = city.BuyAllEquipmentFrom(PlayerController.Instance.inventory);
+            PlayerController.Instance.inventory.money += monies;
+            //LoadCityInteractions(city);
+        });
+        
+
+        btn_go = GameObject.Instantiate(pf_button);
+        btn_go.transform.SetParent(ui.transform);
+        btn_go.name = "Exit City";
+        Button btn_exit = btn_go.GetComponentInChildren<Button>();
+        text = btn_exit.GetComponentInChildren<Text>();
+        text.text = "Exit City";
+        text.font = font;
+        btn_exit.onClick.AddListener(() =>
+        {
+            Debug.Log("Exited the City:- weee");
+            PlayerController.Instance.lockActions = false;
+            place = null;
+            HideUI();
+        });
+    }
+
+    /// <summary>
+    /// "Hide" the UI by completely destroying it.
+    /// </summary>
+     
+    private void HideUI()
+    {
+        Debug.Log("Hiding the UI");
+        if (ui != null) {
+            ui.SetActive(false);
+            GameObject.Destroy(ui);
+        }
+
+    }
+
 }

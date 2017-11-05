@@ -2,7 +2,7 @@
 using System.Collections;
 using System;
 
-public class Player {
+public class Player : Agent {
 
     public int x
     {
@@ -29,7 +29,7 @@ public class Player {
         }
     }
 
-    private Action<Player> cbPlayerMoved;
+    public Action<Player> cbPlayerMoved;
     public Player() {
         x = 0;
         y = 0;
@@ -45,11 +45,12 @@ public class Player {
         Debug.Log("Player moved from location: " + x + "," + y);
         x += dx;
         y += dy;
-        Debug.Log("Player moved to location: " + x + "," + y);
         if(cbPlayerMoved != null)
             cbPlayerMoved(this);
+        Debug.Log("Player moved to location: " + x + "," + y);
     }
 
+    
     public void RegisterPlayerMovedCallback(Action<Player> callback) {
         cbPlayerMoved += callback;
     }

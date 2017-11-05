@@ -17,14 +17,16 @@ public class WorldController : MonoBehaviour {
 
     static bool loadWorld = false;
 
-    void OnEnable () {
+    void OnEnable()
+    {
         if (Instance != null)
             Debug.LogError("WorldCOntroller - somehow there was already a worldcontroller.");
         Instance = this;
 
         if (loadWorld == false) {
             CreateNewWorld();
-        } else {
+        }
+        else {
             loadWorld = false;
             CreateWorldFromSave();
         }

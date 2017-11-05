@@ -28,6 +28,7 @@ public class CameraController : MonoBehaviour {
         cam = Camera.main;
 
         player.RegisterPlayerMovedCallback(UpdateCamera);
+        player.cbPlayerMoved(player);
 	}
 	
 	// Update is called once per frame

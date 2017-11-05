@@ -5,8 +5,7 @@ using System;
 public class Inventory {
 
     public int items = 0;
-
-
+    internal int money = 0;
 
     public void addItem(Item item) {
         items += 1;
@@ -14,6 +13,6 @@ public class Inventory {
         
     
     public bool isEmpty() {
-        return true;
+        return items < 0;
     }
 }

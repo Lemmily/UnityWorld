@@ -23,6 +23,7 @@ public class PlayerController : MonoBehaviour {
 
     public static PlayerController Instance;
     public Player player;
+    public Inventory inventory;
     public GameObject player_go;
     public bool lockActions;
 
@@ -35,7 +36,7 @@ public class PlayerController : MonoBehaviour {
         SpriteRenderer sr = player_go.AddComponent<SpriteRenderer>();
         sr.sortingLayerName = "Tiles";
         sr.sprite = ResourceLoader.GetPlayerSprite(player);
-
+        inventory = new Inventory();
         player.RegisterPlayerMovedCallback(DrawPlayer);
         DrawPlayer(player);
 	}
@@ -86,13 +87,29 @@ public class PlayerController : MonoBehaviour {
 
             //3D planes.
             case Direction.Down:
-                Dungeon dun = world.CheckForDungeon(player.x, player.y);
-                if (dun != null) {
-                    //DungeonInteractionUIController.Instance.Dungeon = dun;
-                    PlaceInteractionController.Instance.Place = dun;
+                IPlace place = world.CheckForPlace(player.x, player.y);
+                if (place != null) {
+                    PlaceInteractionController.Instance.Place = place;
                     lockActions = true;
                     return true;
                 }
+
+                //switch (place.Type) {
+                //    case World.PlaceType.City:
+                //        break;
+                //    case World.PlaceType.Dungeon:
+                //        Dungeon dun = world.CheckForDungeon(player.x, player.y);
+                //        if (dun != null) {
+                //            //DungeonInteractionUIController.Instance.Dungeon = dun;
+                //            PlaceInteractionController.Instance.Place = dun;
+                //        }
+                //        break;
+                //    case World.PlaceType.Farm:
+                //        break;
+                //    default:
+                //        break;
+                //}
+
                 break;
             //case Direction.Up:
 
@@ -109,6 +126,23 @@ public class PlayerController : MonoBehaviour {
         player.Move(dx, dy);
 
         return false;
+    }
+
+
+    public string GetPlayerInfo()
+    {
+        string msg = "";
+
+        msg += "Location: - " + player.x + "," + player.y;
+        msg += "\nSkill Level:- " + player.Skill;
+
+        msg += "\n";
+
+        msg += "Inventory:- " + inventory.items;
+        msg += "Monies:- " + inventory.money;
+
+
+        return msg;
     }
     
 }

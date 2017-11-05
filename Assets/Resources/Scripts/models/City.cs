@@ -32,9 +32,9 @@ public class City : IPlace  {
     /*
         Returns the money "used" to buy items.
     */
-    public int buyAllEquipmentFrom(Inventory pInventory) {
+    public int BuyAllEquipmentFrom(Inventory pInventory) {
 
-        if (inventory.isEmpty()) {
+        if (pInventory.isEmpty()) {
             return 0;
         }
         int cost = AssessCost(pInventory);
@@ -51,11 +51,10 @@ public class City : IPlace  {
         if (pInventory.isEmpty()) {
             return 0;
         } else {
-            int tally = 0;
-            for (int i = 0; i < pInventory.items; i++) {
-                tally += 30; //TODO: make this an actual cost not hard coded.
-            }
-            return tally;
+            //for (int i = 0; i < pInventory.items; i++) {
+            //    tally += 30; //TODO: make this an actual cost not hard coded.
+            //}
+            return 30 * pInventory.items;
         }
         
     }
