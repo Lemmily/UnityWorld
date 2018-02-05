@@ -44,7 +44,7 @@ public class CameraController : MonoBehaviour {
 
 
         if (lockedToPlayer) {
-            start = new Vector3(player.x - screenWidthInWorld / 2, player.y - screenHeightInWorld / 2);
+            start = new Vector3(player.X - screenWidthInWorld / 2, player.Y - screenHeightInWorld / 2);
         }
 
 

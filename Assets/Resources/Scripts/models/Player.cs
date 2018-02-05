@@ -4,16 +4,6 @@ using System;
 
 public class Player : Agent {
 
-    public int x
-    {
-        get;
-        set;
-    }
-    public int y
-    {
-        get;
-        set;
-    }
 
     private int skill = 2; //TODO: un-hardcode this.
     public int Skill
@@ -31,23 +21,23 @@ public class Player : Agent {
 
     public Action<Player> cbPlayerMoved;
     public Player() {
-        x = 0;
-        y = 0;
+        X = 0;
+        Y = 0;
     }
 
     public Player(int x, int y) {
-        this.x = x;
-        this.y = y;
+        this.X = x;
+        this.Y = y;
     }
 
     public void Move(int dx, int dy) {
         //no checks - they are done PRIOR to this!
-        Debug.Log("Player moved from location: " + x + "," + y);
-        x += dx;
-        y += dy;
+        Debug.Log("Player moved from location: " + X + "," + Y);
+        X += dx;
+        Y += dy;
         if(cbPlayerMoved != null)
             cbPlayerMoved(this);
-        Debug.Log("Player moved to location: " + x + "," + y);
+        Debug.Log("Player moved to location: " + X + "," + Y);
     }
 
     

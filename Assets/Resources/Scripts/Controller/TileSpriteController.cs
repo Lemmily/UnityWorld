@@ -116,7 +116,7 @@ public class TileSpriteController : MonoBehaviour {
                 }
                 go.SetActive(true);
                 go.name = "Tile_" + x + "_" + y;
-                go.transform.position = new Vector3(tile_data.x, tile_data.y, 0);
+                go.transform.position = new Vector3(tile_data.X, tile_data.Y, 0);
 
                 SpriteRenderer sr = go.GetComponent<SpriteRenderer>();
                 sr.sprite = ResourceLoader.GetTileSprite(tile_data);

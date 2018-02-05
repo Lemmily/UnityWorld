@@ -2,8 +2,23 @@
 using System.Collections;
 
 public class Agent {
+
+
+    public int X
+    {
+        get;
+        set;
+    }
+    public int Y
+    {
+        get;
+        set;
+    }
+
     int points = 0;
     public string name = "Player";
+
+
     //TODO: this doesn't need to be a monobehaviour.
     // will split this into an "Agent" who represents the physical "body" which is disconnected from 
     // it's actual "Brain" eg, Trader, Hero etc. 

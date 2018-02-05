@@ -48,7 +48,7 @@ public class PlayerController : MonoBehaviour {
 
     private void DrawPlayer(Player player) {
         //drew player
-        player_go.transform.localPosition = new Vector3(player.x, player.y, 0);
+        player_go.transform.localPosition = new Vector3(player.X, player.Y, 0);
         player_go.name = "Player";
         //not sure this is really needed unless there's a sprite change??
         SpriteRenderer sr = player_go.GetComponent<SpriteRenderer>();
@@ -64,22 +64,22 @@ public class PlayerController : MonoBehaviour {
 
             //orthogonal
             case Direction.North:
-                if (world.GetTileAt(player.x, player.y + 1).IsEnterable()) {
+                if (world.GetTileAt(player.X, player.Y + 1).IsEnterable()) {
                     return true;
                 }
                 break;
             case Direction.South:
-                if (world.GetTileAt(player.x, player.y - 1).IsEnterable()) {
+                if (world.GetTileAt(player.X, player.Y - 1).IsEnterable()) {
                     return true;
                 }
                 break;
             case Direction.West:
-                if (world.GetTileAt(player.x - 1, player.y).IsEnterable()) {
+                if (world.GetTileAt(player.X - 1, player.Y).IsEnterable()) {
                     return true;
                 }
                 break;
             case Direction.East:
-                if (world.GetTileAt(player.x + 1, player.y).IsEnterable()) {
+                if (world.GetTileAt(player.X + 1, player.Y).IsEnterable()) {
                     return true;
                 }
                 break;
@@ -87,7 +87,7 @@ public class PlayerController : MonoBehaviour {
 
             //3D planes.
             case Direction.Down:
-                IPlace place = world.CheckForPlace(player.x, player.y);
+                IPlace place = world.CheckForPlace(player.X, player.Y);
                 if (place != null) {
                     PlaceInteractionController.Instance.Place = place;
                     lockActions = true;
@@ -133,7 +133,7 @@ public class PlayerController : MonoBehaviour {
     {
         string msg = "";
 
-        msg += "Location: - " + player.x + "," + player.y;
+        msg += "Location: - " + player.X + "," + player.Y;
         msg += "\nSkill Level:- " + player.Skill;
 
         msg += "\n";

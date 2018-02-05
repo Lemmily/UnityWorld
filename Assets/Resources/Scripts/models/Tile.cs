@@ -9,26 +9,26 @@ public class Tile : IXmlSerializable
 {
     private float baseTileMovementCost;
     private World world;
-    private Action<Tile> cbTileTypeChanged;
+    private Action<Tile> cbTileChanged;
     public int tileType;
     public float movementCost
     {
         get
         {
-            return baseTileMovementCost; //todo: add in things that can be in the tile.
+            return baseTileMovementCost; //todo: add in things that can be in the tile that alter movement cost.
         }
     }
 
 
 
-    public int x
+    public int X
     {
         get;
 
         protected set;
     }
 
-    public int y
+    public int Y
     {
         get;
 
@@ -40,14 +40,15 @@ public class Tile : IXmlSerializable
     }
 
     public Tile(World world, int x, int y, int tileType) : this(world) {
-        this.x = x;
-        this.y = y;
+        this.X = x;
+        this.Y = y;
         this.tileType = tileType;
     }
 
     internal void RegisterTileTypeChangedCallback(Action<Tile> callback) {
-        cbTileTypeChanged += callback;
+        cbTileChanged += callback;
     }
+    
 
     public XmlSchema GetSchema() {
         throw new NotImplementedException();

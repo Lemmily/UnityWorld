@@ -35,6 +35,7 @@ public class City : IPlace  {
     public int BuyAllEquipmentFrom(Inventory pInventory) {
 
         if (pInventory.isEmpty()) {
+            Debug.Log("There are no items in the inventory!");
             return 0;
         }
         int cost = AssessCost(pInventory);

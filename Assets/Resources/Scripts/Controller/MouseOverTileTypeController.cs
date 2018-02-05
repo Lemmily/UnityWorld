@@ -32,7 +32,7 @@ public class MouseOverTileTypeController : MonoBehaviour {
             return;
         
         string text = "Tile type: " + t.tileType +
-            "\nLocation: " + t.x + "," + t.y;
+            "\nLocation: " + t.X + "," + t.Y;
 
         if (WorldController.Instance.World.CheckForPlace(t)) {
             text += "\nPlace: " + WorldController.Instance.World.GetPlace(t).GetName();
