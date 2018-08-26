@@ -50,7 +50,7 @@ public class WorldController : MonoBehaviour {
     }
     
 
-    internal Tile GetTileAtWorldCoord(Vector3 coord) {
+    internal OwnTile GetTileAtWorldCoord(Vector3 coord) {
         int x = Mathf.FloorToInt(coord.x + 0.5f);
         int y = Mathf.FloorToInt(coord.y + 0.5f);
 

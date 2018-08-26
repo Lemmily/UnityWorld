@@ -27,7 +27,7 @@ public class MouseOverTileTypeController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        Tile t = mouseController.GetMouseOverTile();
+        OwnTile t = mouseController.GetMouseOverTile();
         if (t == null)
             return;
         

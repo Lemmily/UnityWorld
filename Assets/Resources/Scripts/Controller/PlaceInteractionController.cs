@@ -142,7 +142,7 @@ public class PlaceInteractionController : MonoBehaviour
 
         }
     }
-    
+
 
     private void CreateDungeonPanel(Dungeon dungeon)
     {
@@ -167,7 +167,7 @@ public class PlaceInteractionController : MonoBehaviour
         btn_challenge.onClick.AddListener(() => {
             dungeon.ChallengeDungeon(WorldController.Instance.Player);
             LoadDungeonInteractions(dungeon);
-            });
+        });
 
         btn_go = GameObject.Instantiate(pf_button);
         btn_go.transform.SetParent(ui.transform);
@@ -176,7 +176,11 @@ public class PlaceInteractionController : MonoBehaviour
         text = btn_get_items.GetComponentInChildren<Text>();
         text.text = "Get Items";
         text.font = font;
-        btn_get_items.onClick.AddListener(() => dungeon.GetItems(PlayerController.Instance.player, PlayerController.Instance.inventory));
+        btn_get_items.onClick.AddListener(() => {
+            dungeon.GetItems(PlayerController.Instance.player, PlayerController.Instance.inventory);
+            //TODO: make a pop up for when allthe items have been picked up and there are none left?
+            Debug.Log("Got those items!");
+        }); 
 
         btn_go = GameObject.Instantiate(pf_button);
         btn_go.transform.SetParent(ui.transform);
@@ -244,8 +248,8 @@ public class PlaceInteractionController : MonoBehaviour
      
     private void HideUI()
     {
-        Debug.Log("Hiding the UI");
         if (ui != null) {
+            Debug.Log("Hiding the UI");
             ui.SetActive(false);
             GameObject.Destroy(ui);
         }

@@ -66,7 +66,7 @@ public class MouseController : MonoBehaviour
         return currFramePosition;
     }
 
-    public Tile GetMouseOverTile() {
+    public OwnTile GetMouseOverTile() {
         /*		return WorldController.Instance.world.GetTileAt(
                     Mathf.FloorToInt(currFramePosition.x), 
                     Mathf.FloorToInt(currFramePosition.y)

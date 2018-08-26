@@ -7,7 +7,7 @@ public class TileSpriteController : MonoBehaviour {
 
 
     public static TileSpriteController Instance;
-    private Dictionary<Tile, GameObject> tileGameObjectMap;
+    private Dictionary<OwnTile, GameObject> tileGameObjectMap;
 
 
     private Stack<GameObject> activeObjects;
@@ -52,7 +52,7 @@ public class TileSpriteController : MonoBehaviour {
 	}
 
 
-    void OnTileChanged(Tile tile_data) {
+    void OnTileChanged(OwnTile tile_data) {
         //do stuff;
         Debug.Log("Tile changed: TileSpriteController noticed!");
     }
@@ -85,7 +85,7 @@ public class TileSpriteController : MonoBehaviour {
         if (! setup) {
             deactivatedObjects = new Stack<GameObject>();
             activeObjects = new Stack<GameObject>();
-            tileGameObjectMap = new Dictionary<Tile, GameObject>();
+            tileGameObjectMap = new Dictionary<OwnTile, GameObject>();
             setup = true;
         }
         //camera has already been updated.
@@ -101,7 +101,7 @@ public class TileSpriteController : MonoBehaviour {
 
         for (int x = (int)start.x - 1; x < end.x + 2 ; x++) {
             for (int y = (int)start.y - 1; y < end.y + 2; y++) {
-                Tile tile_data = WorldController.Instance.World.GetTileAt(x, y);
+                OwnTile tile_data = WorldController.Instance.World.GetTileAt(x, y);
                 if (tile_data == null)
                     continue;
 
@@ -167,7 +167,7 @@ public class TileSpriteController : MonoBehaviour {
 
         for (int x = (int)start.x - 1; x < width + 1; x++) {
             for (int y = (int) start.y - 1; y < height + 1; y++) {
-                Tile t = World.GetTileAt(x, y);
+                OwnTile t = World.GetTileAt(x, y);
                 if (t == null)
                     continue;
                 int tileType = t.tileType;

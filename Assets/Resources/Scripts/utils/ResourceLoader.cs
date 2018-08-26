@@ -106,7 +106,7 @@ public class ResourceLoader : MonoBehaviour
         return instance.tileSpriteMap[name];
     }
 
-    public static Sprite GetTileSprite(Tile tile_data) {
+    public static Sprite GetTileSprite(OwnTile tile_data) {
 
         return instance.tileSpriteMap["tiles2_" + tile_data.tileType];
     }
