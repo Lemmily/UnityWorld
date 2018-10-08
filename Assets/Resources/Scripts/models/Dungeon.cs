@@ -20,11 +20,13 @@ public class Dungeon : IPlace
     }
 
     public bool beaten;
+    public bool cleared;
 
     public Dungeon(int x, int y) {
         this.X = x;
         this.Y = y;
         beaten = false;
+        cleared = false;
         Description = "";
         Name = "Dungeon";
     }
@@ -33,11 +35,16 @@ public class Dungeon : IPlace
         this.X = x;
         this.Y = y;
         beaten = false;
+        cleared = false;
         this.Description = description;
         this.Name = "Dungeon";
     }
 
     public List<Item> GetItems(Agent agent, Inventory inventory) {
+        if (cleared) {
+            Debug.Log("Dungeon has been cleared already!");
+            return null;
+        }
         inventory.items += 1;
         return null;
     }
@@ -45,8 +52,12 @@ public class Dungeon : IPlace
 
     public bool ChallengeDungeon(Agent agent) {
 
+        if (beaten) {
+            Debug.Log("Dungeon has been beaten already!");
+            return false;
+        }
         Debug.Log("Dungeon:- " + agent.name + " challenged the dungeon!");
-        // insta-success
+        // TODO:- change insta-success
         beaten = true;
         return true;
     }

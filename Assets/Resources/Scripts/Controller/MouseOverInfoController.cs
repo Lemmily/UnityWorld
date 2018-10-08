@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 
-public class MouseOverTileTypeController : MonoBehaviour {
+public class MouseOverInfoController : MonoBehaviour {
 
 
     Text theText;

@@ -138,8 +138,8 @@ public class PlayerController : MonoBehaviour {
 
         msg += "\n";
 
-        msg += "Inventory:- " + inventory.items;
-        msg += "Monies:- " + inventory.money;
+        msg += "\nInventory:- " + inventory.items;
+        msg += "\nMonies:- " + inventory.money;
 
 
         return msg;
