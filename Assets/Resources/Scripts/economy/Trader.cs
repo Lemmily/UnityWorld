@@ -44,7 +44,7 @@ public class Trader  : MonoBehaviour {
         if (quantity != 0 && money > quantity * price) {
             sell.owner.giveMoney(quantity * price);
             sell.quantity -= quantity;
-            sell.checkValid();
+            sell.CheckValid();
 
             this.money -= quantity * price;
             aquireResource(buy.resource, quantity);

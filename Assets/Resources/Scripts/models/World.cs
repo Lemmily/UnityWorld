@@ -13,12 +13,12 @@ public class World : IXmlSerializable {
 
     public enum PlaceType { City, Dungeon, Farm };
 
-    OwnTile[,] map;
-    private Action<OwnTile> cbTileChanged;
+    MapTile[,] map;
+    private Action<MapTile> cbTileChanged;
     private List<Dungeon> dungeons;
     private List<City> cities;
 
-    private Dictionary<OwnTile, IPlace> allPlaces;
+    private Dictionary<MapTile, IPlace> allPlaces;
 
     public World (int width, int height) {
         SetupWorld(width, height);
@@ -33,19 +33,19 @@ public class World : IXmlSerializable {
         Width = width;
         Height = height;
 
-        map = new OwnTile[Width, Height];
+        map = new MapTile[Width, Height];
         MapInfo generatedMap = new MapInfo(Width, Height);
         WorldGenerator.seed = 216.724f;//       133.564f;
         generatedMap = WorldGenerator.Start(generatedMap);
 
         for (int x = 0; x < Width; x++) {
             for (int y = 0; y < Height; y++) {
-                map[x, y] = new OwnTile(this, x, y, generatedMap.getTile(x, y, "terrain"));
+                map[x, y] = new MapTile(this, x, y, generatedMap.getTile(x, y, "terrain"));
                 map[x, y].RegisterTileTypeChangedCallback(OnTileChanged);
             }
         }
 
-        allPlaces = new Dictionary<OwnTile, IPlace>();
+        allPlaces = new Dictionary<MapTile, IPlace>();
 
         dungeons = new List<Dungeon>();
         CreateDungeon();
@@ -55,13 +55,13 @@ public class World : IXmlSerializable {
         CreateCity(95, 95, "City phantabulous");
     }
 
-    internal IPlace GetPlace(OwnTile t) {
+    internal IPlace GetPlace(MapTile t) {
         if (CheckForPlace(t))
             return allPlaces[t];
         return null;
     }
 
-    internal bool CheckForPlace(OwnTile t) {
+    internal bool CheckForPlace(MapTile t) {
         return allPlaces.ContainsKey(t);
     }
     internal IPlace CheckForPlace(int x, int y)
@@ -101,24 +101,24 @@ public class World : IXmlSerializable {
         return null;
     }
 
-    public void RegisterTileChanged(Action<OwnTile> callbackfunc) {
+    public void RegisterTileChanged(Action<MapTile> callbackfunc) {
         cbTileChanged += callbackfunc;
     }
 
 
-    public void UnregisterTileChanged(Action<OwnTile> callbackfunc) {
+    public void UnregisterTileChanged(Action<MapTile> callbackfunc) {
         cbTileChanged -= callbackfunc;
     }
 
 
 
-    public OwnTile GetTileAt(Vector2 tileCoord) {
+    public MapTile GetTileAt(Vector2 tileCoord) {
         return GetTileAt(
             Mathf.FloorToInt(tileCoord.x),
             Mathf.FloorToInt(tileCoord.y));
     }
 
-    public OwnTile GetTileAt(int x, int y) {
+    public MapTile GetTileAt(int x, int y) {
         if (x >= Width || x < 0 || y >= Height || y < 0) {
             return null;
         }
@@ -126,7 +126,7 @@ public class World : IXmlSerializable {
     }
 
 
-    void OnTileChanged(OwnTile t) {
+    void OnTileChanged(MapTile t) {
         if(cbTileChanged == null) {
             return;
         }

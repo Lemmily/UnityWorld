@@ -30,7 +30,8 @@ public class Hero : Agent
     }
 
     private void doAction() {
-        action = new AgentIdle(this);
+        if (action == null) 
+            action = new AgentIdle(this);
     }
 
     private void decideAction() {

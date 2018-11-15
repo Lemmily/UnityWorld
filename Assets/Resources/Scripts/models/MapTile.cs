@@ -5,11 +5,11 @@ using System.Xml.Schema;
 using System.Xml.Serialization;
 using System;
 
-public class OwnTile : IXmlSerializable
+public class MapTile : IXmlSerializable
 {
     private float baseTileMovementCost;
     private World world;
-    private Action<OwnTile> cbTileTypeChanged;
+    private Action<MapTile> cbTileTypeChanged;
     public int tileType;
     public float movementCost
     {
@@ -35,17 +35,17 @@ public class OwnTile : IXmlSerializable
         protected set;
     }
 
-    public OwnTile(World world) {
+    public MapTile(World world) {
         this.world = world;
     }
 
-    public OwnTile(World world, int x, int y, int tileType) : this(world) {
+    public MapTile(World world, int x, int y, int tileType) : this(world) {
         this.x = x;
         this.y = y;
         this.tileType = tileType;
     }
 
-    internal void RegisterTileTypeChangedCallback(Action<OwnTile> callback) {
+    internal void RegisterTileTypeChangedCallback(Action<MapTile> callback) {
         cbTileTypeChanged += callback;
     }
 

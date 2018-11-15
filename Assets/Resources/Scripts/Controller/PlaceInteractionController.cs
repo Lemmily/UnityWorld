@@ -35,7 +35,7 @@ public class PlaceInteractionController : MonoBehaviour
 
             if (place == null) {
                 HideUI();
-                Debug.Log("PlaceInteractionController:- Setting place to null, adn trying to act on it!");
+                Debug.Log("PlaceInteractionController:- Setting place to null, and trying to act on it!");
                 return;
             }
 

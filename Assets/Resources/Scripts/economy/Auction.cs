@@ -53,12 +53,12 @@ public class Auction {
     }
 
     public void addRequest(Request request) {
-        if (! request.checkValid()) {
+        if (! request.CheckValid()) {
             Debug.LogError("Auction.AddRequest, tried to add an invalid request to auction. " + request.owner + " " + request.quantity + "," + request.resource);
             return;
         }
         requests.Add(request);
-        if (request.isBuy()) {
+        if (request.IsBuy()) {
             requestsByType["buy"].Add(request);
         } else {
             requestsByType["sell"].Add(request);
@@ -80,7 +80,7 @@ public class Auction {
                     //try next one.
                     sellIndex ++;
                 } else {
-                    if(sells[sellIndex].sellTo(buy)) {
+                    if(sells[sellIndex].Negotiate(buy)) {
                         Debug.Log("Successful Trade of " + buy.ToString());
                     }
                 }

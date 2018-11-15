@@ -21,8 +21,10 @@ public class CityController : MonoBehaviour {
         Instance = this;
 	}
 	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+
+
+    public void doThings()
+    {
+        //resolve auctions.
+    }
 }

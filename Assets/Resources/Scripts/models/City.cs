@@ -27,6 +27,9 @@ public class City : IPlace  {
         this.Description = desc;
         this.Name = "City";
         this.inventory = new Inventory();
+
+        //debuggy
+        testAuction();
     }
 
     /*
@@ -63,10 +66,46 @@ public class City : IPlace  {
         if (Description != null) {
             return Description;
         }
-        return "DUNGEON \n This is a Dungeon. Make yourself at home.";
+        return "CITY \n This is a City. Make yourself at home.";
     }
 
     public string GetName() {
         return Name;
     }
+
+
+
+
+    /* 
+     * Ecoonmy testing stuffs.
+     * 
+     */
+
+
+    public Auction auction;
+
+    public Trader traderOne = new Trader();
+    public Trader traderTwo = new Trader();
+
+    public void testAuction()
+    {
+        if (auction == null)
+        {
+            auction = new Auction(new Resource("Goods"), true); //create a permenant auction for goods.
+            auction.addRequest(new Request(traderOne, true, new Resource("Goods"), 3));
+            auction.addRequest(new Request(traderOne, true, new Resource("Goods"), 3));
+            auction.addRequest(new Request(traderOne, true, new Resource("Goods"), 3));
+            auction.addRequest(new Request(traderOne, true, new Resource("Goods"), 3));
+            auction.addRequest(new Request(traderTwo, false, new Resource("Goods"), 20));
+        }
+
+        auction.resolveRequests();
+    }
+
+
+
+
+
+
+
 }

@@ -9,7 +9,8 @@ public class Request  {
     public int price;
     public int quantity;
     public Resource resource;
-    public bool active;
+    public bool active = true;
+    public bool accepted = false;
 
     public Request(Trader owner, bool buy, Resource res, int quantity, int price=-1) {
         this.buy = buy;
@@ -17,14 +18,13 @@ public class Request  {
         this.quantity = quantity;
         this.price = price;
         this.owner = owner;
-        this.active = true;
     }
 
-    internal bool isBuy() {
+    public bool IsBuy() {
         return buy;
     }
 
-    internal bool sellTo(Request buy) {
+    public bool Negotiate(Request buy) {
         //temp i imagine...
 
 
@@ -55,7 +55,7 @@ public class Request  {
 
     }
 
-    internal bool checkValid() {
+    internal bool CheckValid() {
         if (quantity <= 0) {
             //dieeeeeee request.
             active = false;

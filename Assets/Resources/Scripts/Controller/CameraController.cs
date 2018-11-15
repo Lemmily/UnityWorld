@@ -28,7 +28,7 @@ public class CameraController : MonoBehaviour {
         cam = Camera.main;
 
         player.RegisterPlayerMovedCallback(UpdateCamera);
-        player.cbPlayerMoved(player);
+        player.cbPlayerMoved(player); //center camera on player.
 	}
 	
 	// Update is called once per frame
