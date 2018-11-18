@@ -56,4 +56,10 @@ public class WorldController : MonoBehaviour {
 
         return World.GetTileAt(x, y);
     }
+
+
+    public bool IsTraversable(Vector3 worldCoord)
+    {
+        return GetTileAtWorldCoord(worldCoord).IsEnterable();
+    }
 }

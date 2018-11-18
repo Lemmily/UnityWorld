@@ -10,7 +10,6 @@ public class World : IXmlSerializable {
     public int Width;
     public int Height;
 
-
     public enum PlaceType { City, Dungeon, Farm };
 
     OwnTile[,] map;

@@ -1,7 +1,6 @@
 ﻿public interface IPlace
 {
-
-
+    
     int X { get; }
     int Y { get; }
     string Description { get; }
