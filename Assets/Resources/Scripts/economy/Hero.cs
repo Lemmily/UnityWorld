@@ -2,7 +2,7 @@
 using System.Collections;
 using System;
 
-public class Hero : Agent
+public class Hero : BaseAgent
 {
 
     public int points;

@@ -2,7 +2,7 @@
 using System.Collections;
 using System;
 
-public class Player : Agent {
+public class Player : BaseAgent {
 
     public int x
     {

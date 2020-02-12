@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ContentModelStore">
+    <e p="C:\Users\lemmily\.Rider2019.1\system\extResources" t="IncludeRecursive" />
+    <e p="C:\Users\lemmily\.Rider2019.1\system\resharper-host\local\Transient\ReSharperHost\v191\SolutionCaches\_Ludum34.1874362351.00" t="ExcludeRecursive" />
+    <e p="D:\ProjectFolders\Unity\Ludum34" t="IncludeRecursive">
+      <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
+      <e p="Assets" t="Include">
+        <e p="Resources" t="Include">
+          <e p="Fonts" t="Include">
+            <e p="glyphs.txt" t="Include" />
+          </e>
+          <e p="Scripts" t="Include">
+            <e p="Cellular.cs" t="Include" />
+            <e p="Controller" t="Include">
+              <e p="CameraController.cs" t="Include" />
+              <e p="CityController.cs" t="Include" />
+              <e p="DungeonInteractionUIController.cs" t="Include" />
+              <e p="InventoryController.cs" t="Include" />
+              <e p="KeyboardController.cs" t="Include" />
+              <e p="MouseController.cs" t="Include" />
+              <e p="MouseOverInfoController.cs" t="Include" />
+              <e p="PlaceInteractionController.cs" t="Include" />
+              <e p="PlaceSpriteController.cs" t="Include" />
+              <e p="PlayerController.cs" t="Include" />
+              <e p="PlayerInfoController.cs" t="Include" />
+              <e p="TileSpriteController.cs" t="Include" />
+              <e p="WorldController.cs" t="Include" />
+              <e p="WorldTimeController.cs" t="Include" />
+            </e>
+            <e p="economy" t="Include">
+              <e p="AgentAction.cs" t="Include" />
+              <e p="AgentIdle.cs" t="Include" />
+              <e p="Auction.cs" t="Include" />
+              <e p="Business.cs" t="Include" />
+              <e p="Economy.cs" t="Include" />
+              <e p="Hero.cs" t="Include" />
+              <e p="Request.cs" t="Include" />
+              <e p="Resource.cs" t="Include" />
+              <e p="Trader.cs" t="Include" />
+            </e>
+            <e p="farming" t="Include">
+              <e p="Farm.cs" t="Include" />
+              <e p="LandGenerator.cs" t="Include" />
+            </e>
+            <e p="MapGenerator.cs" t="Include" />
+            <e p="MapInfo.cs" t="Include" />
+            <e p="MapType.cs" t="Include" />
+            <e p="MeshGenerator.cs" t="Include" />
+            <e p="models" t="Include">
+              <e p="BaseAgent.cs" t="Include" />
+              <e p="City.cs" t="Include" />
+              <e p="Dungeon.cs" t="Include" />
+              <e p="Inventory.cs" t="Include" />
+              <e p="IPlace.cs" t="Include" />
+              <e p="Item.cs" t="Include" />
+              <e p="IUnit.cs" t="Include" />
+              <e p="Player.cs" t="Include" />
+              <e p="Tile.cs" t="Include" />
+              <e p="World.cs" t="Include" />
+            </e>
+            <e p="newtilemaps" t="Include">
+              <e p="BasicTilemapPlay.cs" t="Include" />
+              <e p="RoadTile.cs" t="Include" />
+            </e>
+            <e p="PlayerHandler.cs" t="Include" />
+            <e p="resources.xml" t="Include" />
+            <e p="Script.cs" t="Include" />
+            <e p="utils" t="Include">
+              <e p="ResourceLoader.cs" t="Include" />
+            </e>
+            <e p="VisualTiles.cs" t="Include" />
+            <e p="WorldGenerator.cs" t="Include" />
+          </e>
+          <e p="Sprites" t="Include">
+            <e p="Texture.shader" t="Include" />
+            <e p="Texy.shader" t="Include" />
+          </e>
+        </e>
+      </e>
+      <e p="Ludum34.sln" t="IncludeFlat" />
+      <e p="obj" t="ExcludeRecursive" />
+      <e p="Packages" t="ExcludeRecursive" />
+      <e p="Temp\bin" t="ExcludeRecursive" />
+    </e>
+  </component>
+</project>

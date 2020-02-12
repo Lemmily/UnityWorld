@@ -13,7 +13,7 @@ public class WorldController : MonoBehaviour {
     public World World { get; protected set; }
 
     
-    public Agent Player { get; protected set; }
+    public BaseAgent Player { get; protected set; }
 
     static bool loadWorld = false;
 
@@ -46,7 +46,7 @@ public class WorldController : MonoBehaviour {
 
     private void CreateNewWorld() {
         World = new World(200, 200);
-        Player = new Agent();
+        Player = new BaseAgent();
     }
     
 

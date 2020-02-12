@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Agent {
+public class BaseAgent {
     int points = 0;
     public string name = "Player";
     //TODO: this doesn't need to be a monobehaviour.

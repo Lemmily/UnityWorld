@@ -40,7 +40,7 @@ public class Dungeon : IPlace
         this.Name = "Dungeon";
     }
 
-    public List<Item> GetItems(Agent agent, Inventory inventory) {
+    public List<Item> GetItems(BaseAgent baseAgent, Inventory inventory) {
         if (cleared) {
             Debug.Log("Dungeon has been cleared already!");
             return null;
@@ -50,13 +50,13 @@ public class Dungeon : IPlace
     }
 
 
-    public bool ChallengeDungeon(Agent agent) {
+    public bool ChallengeDungeon(BaseAgent baseAgent) {
 
         if (beaten) {
             Debug.Log("Dungeon has been beaten already!");
             return false;
         }
-        Debug.Log("Dungeon:- " + agent.name + " challenged the dungeon!");
+        Debug.Log("Dungeon:- " + baseAgent.name + " challenged the dungeon!");
         // TODO:- change insta-success
         beaten = true;
         return true;

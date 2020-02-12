@@ -3,13 +3,13 @@ using UnityEngine;
 
 internal class AgentIdle : AgentAction
 {
-    private Agent agent;
+    private BaseAgent baseAgent;
 
-    public AgentIdle(Agent agent) {
-        this.agent = agent;
+    public AgentIdle(BaseAgent baseAgent) {
+        this.baseAgent = baseAgent;
     }
 
     public override void Act() {
-        Debug.Log(agent + " performed the " + this.ToString());
+        Debug.Log(baseAgent + " performed the " + this.ToString());
     }
 }
